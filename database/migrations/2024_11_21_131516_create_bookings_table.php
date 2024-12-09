@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id(); // Primary key
             $table->unsignedBigInteger('user_id')->comment('Reference to the player who made the booking');
+            $table->foreignId('field_id')->constrained('fields')->onDelete('cascade');
             $table->string('name');
             $table->string('field_name');
             $table->unsignedBigInteger('field_id')->comment('Reference to the booked field');

@@ -11,6 +11,9 @@ class Booking extends Model
     use HasFactory;
     protected $fillable = ['user_id',
         'field_id',
+        'name',
+        'start_date_time',
+        'end_date_time',
         'date_time',
         'status',
         'amount',
@@ -25,4 +28,13 @@ class Booking extends Model
     {
         return $this->belongsTo(Field::class);
     }
+
+    // In app/Models/User.php
+
+
+
+//    public function payments()
+//    {
+//        return $this->hasMany(Payment::class, 'booking_id');
+//    }
 }

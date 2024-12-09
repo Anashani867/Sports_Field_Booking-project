@@ -1,14 +1,18 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminDashbordController;
-use App\Http\Controllers\ThemeController;
-use App\Http\Controllers\AnalyticsController;
-use App\Http\Controllers\PaymentsController;
-use App\Http\Controllers\FieldController;
-use App\Http\Controllers\Auth\EmailVerificationController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+//use App\Http\Controllers\ProfileController;
+//use Illuminate\Support\Facades\Route;
+//use App\Http\Controllers\AdminDashbordController;
+//use App\Http\Controllers\ThemeController;
+//use App\Http\Controllers\AnalyticsController;
+//use App\Http\Controllers\PaymentsController;
+//use App\Http\Controllers\FieldController;
+//use App\Http\Controllers\BookingController;
+//use App\Http\Controllers\Auth\EmailVerificationController;
+//use App\Http\Controllers\Auth\AuthenticatedSessionController;
+//use App\Http\Controllers\AdminAuthController;
+
+
 
 
 
@@ -23,86 +27,239 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 //Route::get('/', function () {
 //    return view('welcome');
-//})->name('welcome');
+//});
+////Route::get('/', function () {
+////    return view('welcome');
+////})->name('welcome');
+//
+////Route::get('/dashboard', function () {
+////    return view('dashboard');
+////})->middleware(['auth', 'verified'])->name('dashboard');
+////------------------------------------------
+//Route::middleware('auth')->group(function () {
+//    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+//    Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+//});
+//////------------------------------------------------------------
+//
+////Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+////    ->name('logout')
+////    ->middleware('auth')
+////    ->redirectTo(route('login')); // أو يمكنك استخدام المسار المناسب لتسجيل الدخول
+//
+//Route::prefix('admin')->name('admin.')->group(function () {
+//    // Admin Authentication Routes
+//    Route::middleware('guest:admin')->group(function () {
+//        Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+//        Route::post('login', [AdminAuthController::class, 'login']);
+//    });
+//
+//    Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
+//
+//    // Admin Protected Routes
+//    Route::middleware('auth:admin')->group(function () {
+//        Route::get('dashboard', [AdminDashbordController::class, 'index'])->name('dashboard');
+//        Route::get('manageBookings', [AdminDashbordController::class, 'manageBookings'])->name('manageBookings');
+//        Route::get('manageFields', [AdminDashbordController::class, 'manageFields'])->name('manageFields');
+//        Route::get('manageUsers', [AdminDashbordController::class, 'manageUsers'])->name('manageUsers');
+//        Route::get('payments', [AdminDashbordController::class, 'payments'])->name('payments');
+//        Route::get('analytics', [AdminDashbordController::class, 'analytics'])->name('analytics');
+//        Route::get('settings', [AdminDashbordController::class, 'settings'])->name('settings');
+//    });
+//});
+//
+//Route::controller(\App\Http\Controllers\ThemeController::class)->name('theme.')->group(function () {
+//    Route::get('/about', 'about')->name('about');
+//    Route::get('/gallery', 'gallery')->name('gallery');
+//    Route::get('/blog', 'blog')->name('blog');
+//    Route::get('/shop', 'shop')->name('shop');
+//    Route::get('/contact', 'contact')->name('contact');
+//    Route::post('/contact/store', 'store')->name('contact.store');
+//});
+//
+//// Authenticated Routes
+//Route::middleware(['auth'])->group(function () {
+//    Route::get('/bookTickets', [BookingController::class, 'index'])->name('bookTickets');
+//    Route::post('/bookTickets', [BookingController::class, 'bookTickets'])->name('bookTickets');
+//    Route::get('/field/{id}', [FieldController::class, 'showFieldDetails'])->name('Field.Details');
+//});
+//require __DIR__.'/auth.php';
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//Route::controller(\App\Http\Controllers\ThemeController::class)->name('theme.')->group(function () {
+//    Route::get('/about', 'about')->name('about');
+//    Route::get('/gallery', 'gallery')->name('gallery');
+//    Route::get('/blog', 'blog')->name('blog');
+//    Route::post('/bookTickets', 'bookTickets')->name('bookTickets');
+//
+//    Route::get('/shop', 'shop')->name('shop');
+//    Route::get('/contact', 'contact')->name('contact');
+//    Route::post('/contact/store', 'store')->name('contact.store');
+//
+//
+//});
+//
+////Route::middleware(['auth'])->group(function () {
+////    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+////    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+////});
+//
+//
+////Route::controller(\App\Http\Controllers\AdminDashbordController::class)->name('admin.')->group(function () {
+////
+////    Route::get('/admin/dashboard',  'dashboard')->name('dashboard');
+////    Route::get('/admin/manageBookings',  'manageBookings')->name('manageBookings');
+////    Route::get('/admin/manageFields',  'manageFields')->name('manageFields');
+////    Route::get('/admin/manageUsers',  'manageUsers')->name('manageUsers');
+////    Route::get('/admin/payments',  'payments')->name('payments');
+////    Route::get('/admin/analytics',  'analytics')->name('analytics');
+////    Route::get('/admin/settings',  'settings')->name('settings');
+////
+////
+////
+////});
+//
+//
+//
+//
+////Route::get('/admin/add-user', [AdminDashbordController::class, 'loadAddUserForm'])->name('users.add');
+////Route::post('/admin/add-user', [AdminDashbordController::class, 'AddUser'])->name('users.store');
+//Route::get('/admin/edit-user/{id}', [AdminDashbordController::class, 'loadEditForm'])->name('users.edit');
+//Route::post('/admin/edit-user', [AdminDashbordController::class, 'EditUser'])->name('users.update');
+//Route::delete('/admin/manageUsers/{id}', [AdminDashbordController::class, 'deleteUser'])->name('users.delete');
+//Route::patch('/admin/users/{id}/status', [AdminDashbordController::class, 'updateStatus'])->name('users.updateStatus');
+//Route::post('/update-status/{id}', [AdminDashbordController::class, 'updateStatus'])->name('update-status');
+//Route::delete('/Booking/{id}', [AdminDashbordController::class, 'destroy'])->name('delete.Booking');
+//
+////Route::get('/admin/editBooking/{id}', [AdminDashbordController::class, 'loadEditFormBooking'])->name('Booking.edit');
+//Route::get('/admin/editBooking/{id}', [AdminDashbordController::class, 'editBooking'])->name('Booking.edit');
+//Route::match(['put', 'post'], '/admin/updateBooking/{id}', [AdminDashbordController::class, 'updateBooking'])->name('Booking.update');
+//
+//
+//
+//
+//
+//
+//
+//Route::prefix('admin')->name('admin.')->group(function () {
+//    Route::get('/fields', [FieldController::class, 'index'])->name('manageFields');
+//    Route::get('/fields/create', [FieldController::class, 'create'])->name('createField');
+//    Route::post('/fields', [FieldController::class, 'store'])->name('storeField');
+//    Route::get('/fields/{id}/edit', [FieldController::class, 'edit'])->name('editField');
+//    Route::put('/fields/{id}', [FieldController::class, 'update'])->name('updateField');
+//    Route::delete('/fields/{id}', [FieldController::class, 'destroy'])->name('deleteField');
+//});
+//
+//
+//Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('admin.analytics');
+//
+////Route::get('/admin/payments', [PaymentsController::class, 'index'])->name('admin.payments');
+//
+//// routes/web.php
+//Route::get('/admin/payments', [PaymentsController::class, 'dashboard'])->name('admin.payments');
+//
+////Route::get('/admin/payments', [PaymentsController::class, 'index'])
+////    ->name('admin.payments')
+////    ->middleware(['auth', 'admin']);
+//
+//
+//
+//Route::middleware(['auth', 'signed'])->get('/email/verify', [EmailVerificationController::class, 'show'])->name('verification.notice');
+//Route::middleware(['auth'])->post('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+//Route::middleware(['auth'])->get('/email/resend', [EmailVerificationController::class, 'resend'])->name('verification.send');
+//
+//
+//Route::get('/field/{id}', [\App\Http\Controllers\FieldController::class, 'showFieldDetails'])->name('Field.Details');
+//
+//Route::POST('/bookTickets',[\App\Http\Controllers\BookingController::class, 'bookTickets'])->name('bookTickets');
+//Route::get('/bookTickets', [\App\Http\Controllers\BookingController::class, 'index'])->name('bookTickets');
 
-//Route::get('/dashboard', function () {
-//    return view('dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
+//use App\Http\Controllers\ProfileController;
+//use Illuminate\Support\Facades\Route;
+//use App\Http\Controllers\AdminDashbordController;
+//use App\Http\Controllers\ThemeController;
+//use App\Http\Controllers\AnalyticsController;
+//use App\Http\Controllers\PaymentsController;
+//use App\Http\Controllers\FieldController;
+//use App\Http\Controllers\BookingController;
+//use App\Http\Controllers\Auth\EmailVerificationController;
+//use App\Http\Controllers\Auth\AuthenticatedSessionController;
+//use App\Http\Controllers\AdminAuthController;
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ThemeController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\FieldController;
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminDashbordController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// Welcome Page (Public)
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
+
+// ----------------- Guest Routes -----------------
+Route::middleware('guest')->group(function () {
+    // User Authentication Routes
+    Route::get('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store']);
+    Route::get('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])->name('register');
+    Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
 });
 
-//Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-//    ->name('logout')
-//    ->middleware('auth')
-//    ->redirectTo(route('login')); // أو يمكنك استخدام المسار المناسب لتسجيل الدخول
-
-
-require __DIR__.'/auth.php';
-
-
-
-
-Route::controller(\App\Http\Controllers\ThemeController::class)->name('theme.')->group(function () {
-    Route::get('/about', 'about')->name('about');
-    Route::get('/gallery', 'gallery')->name('gallery');
-    Route::get('/blog', 'blog')->name('blog');
-    Route::get('/bookTickets', 'bookTickets')->name('bookTickets');
-    Route::get('/shop', 'shop')->name('shop');
-    Route::get('/contact', 'contact')->name('contact');
-    Route::post('/contact/store', 'store')->name('contact.store');
-
-
-});
-
-
-
-Route::controller(\App\Http\Controllers\AdminDashbordController::class)->name('admin.')->group(function () {
-
-    Route::get('/admin/dashboard',  'dashboard')->name('dashboard');
-    Route::get('/admin/manageBookings',  'manageBookings')->name('manageBookings');
-    Route::get('/admin/manageFields',  'manageFields')->name('manageFields');
-    Route::get('/admin/manageUsers',  'manageUsers')->name('manageUsers');
-    Route::get('/admin/payments',  'payments')->name('payments');
-    Route::get('/admin/analytics',  'analytics')->name('analytics');
-    Route::get('/admin/settings',  'settings')->name('settings');
-
-
-
-});
-
-
-
-
-//Route::get('/admin/add-user', [AdminDashbordController::class, 'loadAddUserForm'])->name('users.add');
-//Route::post('/admin/add-user', [AdminDashbordController::class, 'AddUser'])->name('users.store');
-Route::get('/admin/edit-user/{id}', [AdminDashbordController::class, 'loadEditForm'])->name('users.edit');
-Route::post('/admin/edit-user', [AdminDashbordController::class, 'EditUser'])->name('users.update');
-Route::delete('/admin/manageUsers/{id}', [AdminDashbordController::class, 'deleteUser'])->name('users.delete');
-Route::patch('/admin/users/{id}/status', [AdminDashbordController::class, 'updateStatus'])->name('users.updateStatus');
-Route::post('/update-status/{id}', [AdminDashbordController::class, 'updateStatus'])->name('update-status');
-Route::delete('/Booking/{id}', [AdminDashbordController::class, 'destroy'])->name('delete.Booking');
-
-//Route::get('/admin/editBooking/{id}', [AdminDashbordController::class, 'loadEditFormBooking'])->name('Booking.edit');
-Route::get('/admin/editBooking/{id}', [AdminDashbordController::class, 'editBooking'])->name('Booking.edit');
-Route::post('/admin/updateBooking/{id}', [AdminDashbordController::class, 'updateBooking'])->name('Booking.update');
-
-
-
-
-
-
-
+// ----------------- Admin Routes -----------------
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/fields', [FieldController::class, 'index'])->name('manageFields');
+    // مسارات تسجيل الدخول الخاصة بالأدمن
+    Route::middleware('guest:admin')->group(function () {
+        Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('login', [AdminAuthController::class, 'login']);
+    });
+
+    // مسارات الإدارة المحمية
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('dashboard', [AdminDashbordController::class, 'dashboard'])->name('dashboard');
+        Route::get('manageBookings', [BookingController::class, 'index'])->name('manageBookings');
+        Route::get('manageFields', [FieldController::class, 'index'])->name('manageFields');
+        Route::get('manageUsers', [AdminDashbordController::class, 'manageUsers'])->name('manageUsers');
+        Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('analytics');
+        Route::get('settings', [AdminDashbordController::class, 'settings'])->name('settings');
+    });
+    Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+    Route::middleware('auth:admin')->group(function () {
     Route::get('/fields/create', [FieldController::class, 'create'])->name('createField');
     Route::post('/fields', [FieldController::class, 'store'])->name('storeField');
     Route::get('/fields/{id}/edit', [FieldController::class, 'edit'])->name('editField');
@@ -110,20 +267,46 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/fields/{id}', [FieldController::class, 'destroy'])->name('deleteField');
 });
 
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('/admin/edit-user/{id}', [AdminDashbordController::class, 'loadEditForm'])->name('users.edit');
+        Route::post('/admin/edit-user', [AdminDashbordController::class, 'EditUser'])->name('users.update');
+        Route::delete('/admin/manageUsers/{id}', [AdminDashbordController::class, 'deleteUser'])->name('users.delete');
+        Route::patch('/admin/users/{id}/status', [AdminDashbordController::class, 'updateStatus'])->name('users.updateStatus');
+        Route::post('/update-status/{id}', [AdminDashbordController::class, 'updateStatus'])->name('update-status');
+        Route::delete('/Booking/{id}', [AdminDashbordController::class, 'destroy'])->name('delete.Booking');
+    });
+    Route::middleware('auth:admin')->group(function () {
+Route::get('/admin/editBooking/{id}', [AdminDashbordController::class, 'loadEditFormBooking'])->name('Booking.edit');
+Route::get('/admin/editBooking/{id}', [AdminDashbordController::class, 'editBooking'])->name('Booking.edit');
+Route::match(['put', 'post'], '/admin/updateBooking/{id}', [AdminDashbordController::class, 'updateBooking'])->name('Booking.update');
 
-Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('admin.analytics');
+});
+    Route::middleware('auth:admin')->group(function () {
+Route::get('/admin/payments', [PaymentsController::class, 'dashboard'])->name('payments');
+});
 
-//Route::get('/admin/payments', [PaymentsController::class, 'index'])->name('admin.payments');
-
-// routes/web.php
-Route::get('/admin/payments', [PaymentsController::class, 'dashboard'])->name('admin.payments');
-
-//Route::get('/admin/payments', [PaymentsController::class, 'index'])
-//    ->name('admin.payments')
-//    ->middleware(['auth', 'admin']);
+});
 
 
+// ----------------- Authenticated User Routes -----------------
+Route::middleware(['auth'])->group(function () {
+    Route::get('/bookTickets', [BookingController::class, 'index'])->name('bookTickets');
+    Route::post('/bookTickets', [BookingController::class, 'bookTickets'])->name('bookTickets');
+    Route::get('/field/{id}', [FieldController::class, 'showFieldDetails'])->name('Field.Details');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-Route::middleware(['auth', 'signed'])->get('/email/verify', [EmailVerificationController::class, 'show'])->name('verification.notice');
-Route::middleware(['auth'])->post('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
-Route::middleware(['auth'])->get('/email/resend', [EmailVerificationController::class, 'resend'])->name('verification.send');
+// ----------------- Public Routes -----------------
+Route::controller(ThemeController::class)->name('theme.')->group(function () {
+    Route::get('/about', 'about')->name('about');
+    Route::get('/gallery', 'gallery')->name('gallery');
+    Route::get('/blog', 'blog')->name('blog');
+    Route::get('/shop', 'shop')->name('shop');
+    Route::get('/contact', 'contact')->name('contact');
+    Route::post('/contact/store', 'store')->name('contact.store');
+});
+
+require __DIR__ . '/auth.php';
+

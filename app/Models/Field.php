@@ -32,4 +32,10 @@ class Field extends Model
     {
         return $this->belongsTo(User::class, 'admin_id');
     }
+
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'field_id');
+    }
 }

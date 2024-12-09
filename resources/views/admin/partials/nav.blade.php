@@ -12,10 +12,10 @@
     </ul>
 
 
-    <!-- رابط لتسجيل الخروج -->
-    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-        @csrf
-        <button type="submit" class="btn btn-link">Log out</button>
-    </form>
+{{--    <!-- رابط لتسجيل الخروج -->--}}
+{{--    <form action="{{ route('logout') }}" method="POST" style="display: inline;">--}}
+{{--        @csrf--}}
+{{--        <button type="submit" class="btn btn-link">Log out</button>--}}
+{{--    </form>--}}
 
 </div>

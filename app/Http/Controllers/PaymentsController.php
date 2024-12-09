@@ -24,6 +24,8 @@ class PaymentsController extends Controller
 
     public function dashboard()
     {
+        $payments = Payment::with('booking', 'user')->get();
+
         // Summary Stats
         $totalPayments = Payment::sum('amount');
         $pendingPayments = Payment::where('payment_status', 'Pending')->sum('amount');
@@ -51,6 +53,6 @@ class PaymentsController extends Controller
             ],
             'monthlyPayments' => $monthlyPayments,
             'recentPayments' => $recentPayments,
-        ]);
+        ],compact('payments'));
     }
 }

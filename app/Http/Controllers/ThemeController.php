@@ -6,6 +6,9 @@ use App\Http\Requests\StoreContactRequest;
 use App\Models\Contact;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
+use App\Models\Field;
+use App\Models\Booking;
+
 
 class ThemeController extends Controller
 {
@@ -19,28 +22,38 @@ class ThemeController extends Controller
         return view('theme.about');
 
     }  public function gallery()
-    {
-        return view('theme.gallery');
+{
+    $fields = Field::all();
+    return view('theme.gallery', compact('fields'));
+//        return view('theme.gallery');
 
-    }  public function blog()
-    {
-        return view('theme.blog');
+}  public function blog()
+{
+    return view('theme.blog');
 
-    }  public function bookTickets()
+}
+    public function bookTickets(Request $request)
     {
-        return view('theme.bookTickets');
+        $bookings = Booking::all();
+        $fieldId = $request->field_id;
+        $field = Field::findOrFail($fieldId);
+        return view('theme.bookTickets', compact('field', 'bookings'));
+//      return view('theme.bookTickets');
+    }
 
-    }  public function shop()
+
+
+    public function shop()
     {
         return view('theme.shop');
 
     }  public function contact()
-    {
+{
 //        $data = Contact::all();
 //        dd($data);
-        return view('theme.contact');
+    return view('theme.contact');
 
-    }
+}
     public function store(StoreContactRequest $request)
     {
         $validatedData = $request->validated();
@@ -92,10 +105,6 @@ class ThemeController extends Controller
 //        $validatedData = $request->validate($rules, $messages);
 
 
-
-
-
-
 //        $request->validate([
 //            'fullname' => 'required|string|min:3|max:100|regex:/^[a-zA-Z\s]+$/',
 //            'email' => 'required|email|unique:users,email',
@@ -115,16 +124,9 @@ class ThemeController extends Controller
 //            'phone.digits_between' => 'The phone number must be between 9 and 15 digits.',
 //            'phone.regex' => 'The phone number must contain only numbers.',
 //        ]);
-  }
-
-
-
-
-
-
-
-
-
-
-
+    }
 }
+
+
+
+

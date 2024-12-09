@@ -16,7 +16,7 @@
             <span class="alert alert-danger p-2">{{Session::get('fail')}}</span>
         @endif
         <div class="card-body">
-            <form action="{{ route('users.update') }}" method="post">
+            <form action="{{ route('admin.users.update') }}" method="post">
                 @csrf
                 <input type="hidden" name="user_id" id="" value="{{$user->id}}">
                 <div class="mb-3">

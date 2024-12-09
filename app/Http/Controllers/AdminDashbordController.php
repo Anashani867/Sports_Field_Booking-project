@@ -148,6 +148,8 @@ class AdminDashbordController extends Controller
         // جميع الحجوزات
         $totalBookings  = Booking::count();
 
+//        $Bookings = Booking::with('customer', 'field')->get(); // جلب الحجوزات مع البيانات المرتبطة
+
         // تمرير البيانات إلى الـ view
         return view('admin.manageBookings', compact('bookings','confirmedBookings', 'pendingBookings', 'cancelledBookings', 'totalBookings'));
     }

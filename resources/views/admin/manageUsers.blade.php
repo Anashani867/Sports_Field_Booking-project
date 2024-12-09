@@ -276,17 +276,17 @@
                             </td>
                             <td>{{ $contact->created_at }}</td>
                             <td>
-                                <a href="{{ route('users.edit', $contact->id) }}" class="btn btn-sm btn-primary">
+                                <a href="{{ route('admin.users.edit', $contact->id) }}" class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil"></i> Edit
                                 </a>
-                                <form action="{{ route('users.delete', $contact->id) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('admin.users.delete', $contact->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                                         <i class="bi bi-trash"></i> Delete
                                     </button>
                                 </form>
-                                <form action="{{ route('users.updateStatus', $contact->id) }}" method="post" style="display: inline;">
+                                <form action="{{ route('admin.users.updateStatus', $contact->id) }}" method="post" style="display: inline;">
                                     @csrf
                                     @method('PATCH')
                                     <select name="status" onchange="this.form.submit()" class="form-select form-select-sm">

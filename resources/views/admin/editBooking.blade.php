@@ -151,7 +151,7 @@
                 <h5>Edit Booking</h5>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('Booking.update', $booking->id) }}">
+                <form method="POST" action="{{ route('admin.Booking.update', $booking->id) }}">
                     @csrf
                     @method('PUT')
 

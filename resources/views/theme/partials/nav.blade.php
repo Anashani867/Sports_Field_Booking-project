@@ -3,7 +3,7 @@
     <div class=header-upper>
         <div class=container>
             <div class=row>
-                <ul>
+{{--                <ul>--}}
 
 {{--                    @if (Route::has('login'))--}}
 {{--                        <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right">--}}
@@ -19,13 +19,36 @@
 {{--                        </div>--}}
 {{--                    @endif--}}
 
-{{--                    <a href="{{ route('login') }}" class="btn btn-link">Log in</a>--}}
-{{--                    <a href="{{ route('register') }}" class="btn btn-link">Register</a>--}}
+{{--                    @if(Auth::check()) <!-- تحقق إذا كان المستخدم مسجلاً -->--}}
+{{--                    <p>Welcome, {{ auth()->user()->name }}!</p>--}}
+{{--                    <p>Email: {{ auth()->user()->email }}</p>--}}
+{{--                    @else--}}
+{{--                        <p>Please <a href="{{ route('login') }}">login</a> to access your account.</p>--}}
+{{--                    @endif--}}
+
+                <nav>
+                    <ul>
+                        @if(Auth::check())
+                            <li>Welcome, {{ auth()->user()->name }}</li>
+                            <li><a href="{{ route('profile.edit') }}">Edit Profile</a></li>
+                            <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        @else
+                            <li><a href="{{ route('login') }}" class="btn btn-link">Log in</a></li>
+                            <li><a href="{{ route('register') }}" class="btn btn-link">Register</a></li>
+                        @endif
+                    </ul>
+                </nav>
 
 
-                    <li><a href="#">Signup/login</a></li>
-                    <li><a href=shopcart.html><i class="fa fa-shopping-cart"></i> <span>cart(<span
-                                    class=cartitems>0</span>)</span></a></li>
+
+
+
+                {{--                    <li><a href="#">Signup/login</a></li>--}}
+{{--                    <li><a href=shopcart.html><i class="fa fa-shopping-cart"></i> <span>cart(<span--}}
+{{--                                    class=cartitems>0</span>)</span></a></li>--}}
                 </ul>
             </div>
         </div>
@@ -48,19 +71,19 @@
                                             <span></span></a></li>
                                     <li><a href={{route('theme.about')}} class=@yield('about-active')>about <span></span> <span></span>
                                             <span></span> <span></span></a></li>
-                                    <li><a>gallery <span></span> <span></span> <span></span> <span></span></a>
-                                        <ul class=sub-menu>
-                                            <li class=@yield('gallery-active')><a href={{route('theme.gallery')}}>masonry</a></li>
-                                            <li class=@yield('gallery-active')><a href={{route('theme.gallery')}}>gallery column two</a></li>
-                                            <li class=@yield('gallery-active')><a href={{route('theme.gallery')}}>gallery column 03</a></li>
-                                        </ul>
+                                    <li class=@yield('gallery-active')><a href={{route('theme.gallery')}}>Field Booking <span></span> <span></span> <span></span> <span></span></a>
+{{--                                        <ul class=sub-menu>--}}
+{{--                                            <li class=@yield('gallery-active')><a href={{route('theme.gallery')}}>masonry</a></li>--}}
+{{--                                            <li class=@yield('gallery-active')><a href={{route('theme.gallery')}}>gallery column two</a></li>--}}
+{{--                                            <li class=@yield('gallery-active')><a href={{route('theme.gallery')}}>gallery column 03</a></li>--}}
+{{--                                        </ul>--}}
                                     </li>
                                     <li><a href={{route('theme.blog')}}  class=@yield('blog-active')>blog <span></span> <span></span> <span></span>
                                             <span></span></a></li>
-                                    <li><a href={{route('theme.bookTickets')}} class=@yield('bookTickets-active')>book Tickets<span></span> <span></span>
+                                    <li><a href={{route('bookTickets')}} class=@yield('bookTickets-active')>book Tickets<span></span> <span></span>
                                             <span></span> <span></span></a></li>
-                                    <li><a href={{route('theme.shop')}} class=@yield('shop-active')>shop <span></span> <span></span> <span></span>
-                                            <span></span></a></li>
+{{--                                    <li><a href={{route('theme.shop')}} class=@yield('shop-active')>shop <span></span> <span></span> <span></span>--}}
+{{--                                            <span></span></a></li>--}}
                                     <li><a href={{route('theme.contact')}} class=@yield('contact-active')>contact <span></span> <span></span> <span></span>
                                             <span></span></a></li>
                                     <li><a>error <span></span> <span></span> <span></span> <span></span></a>

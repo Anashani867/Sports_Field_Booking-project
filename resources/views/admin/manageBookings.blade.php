@@ -302,8 +302,8 @@
                     </td>
                     <td>${{ number_format($booking->amount, 2) }}</td>
                     <td>
-                        <a href="{{route('Booking.edit' ,$booking->id )}}" class="btn">Edit</a>
-                        <form action="{{ route('delete.Booking', $booking->id) }}" method="POST" style="display:inline;">
+                        <a href="{{route('admin.Booking.edit' ,$booking->id )}}" class="btn">Edit</a>
+                        <form action="{{ route('admin.delete.Booking', $booking->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Delete</button>

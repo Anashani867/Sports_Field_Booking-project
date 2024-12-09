@@ -22,7 +22,8 @@
                      data-ls="offsetxin: left; offsetxout:left; scalein:90; easingin: easeoutquart; durationin: 3000; delayin: 250;">
 
                 <h2 class="ls-l bannertext layercontent03" data-ls="offsetxin:left; rotatexin:90 ; durationin: 3500;">
-                    action</h2>
+{{--                    action</h2>--}}
+                        booking</h2>
 
                 <h2 class="ls-l bannertext01 italic01 layercontent04"
                     data-ls="offsetxin:left; scalexin:9; durationin: 4000;">starts</h2><h4
@@ -36,13 +37,13 @@
         </div>
         <div class=banner-text>
             <div class=container>
-                <div class=row>action start from 21<sup>st</sup> july , 2015.</div>
+                <div class=row>booking start from 21<sup>st</sup> july , 2015.</div>
             </div>
         </div>
         <section class="booking bg-smallwhite">
             <div class=container>
                 <div class=booking-fig><h2>SCC football club</h2></div>
-                <div class=booking-content><a href=# class="btn btn-white">read more</a> <a href="{{route('theme.bookTickets')}}" class="btn btn-red">book my ticket</a></div>
+                <div class=booking-content><a href=# class="btn btn-white">read more</a> <a href="{{route('bookTickets')}}" class="btn btn-red">book my ticket</a></div>
             </div>
         </section>
         <section class=about>
