@@ -218,6 +218,7 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashbordController;
+use App\Http\Controllers\AdminProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -257,7 +258,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('analytics');
         Route::get('settings', [AdminDashbordController::class, 'settings'])->name('settings');
     });
-    Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
 
     Route::middleware('auth:admin')->group(function () {
     Route::get('/fields/create', [FieldController::class, 'create'])->name('createField');
@@ -267,7 +267,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/fields/{id}', [FieldController::class, 'destroy'])->name('deleteField');
 });
 
-    Route::middleware('auth:admin')->group(function () {
+        Route::middleware('auth:admin')->group(function () {
         Route::get('/admin/edit-user/{id}', [AdminDashbordController::class, 'loadEditForm'])->name('users.edit');
         Route::post('/admin/edit-user', [AdminDashbordController::class, 'EditUser'])->name('users.update');
         Route::delete('/admin/manageUsers/{id}', [AdminDashbordController::class, 'deleteUser'])->name('users.delete');
@@ -276,14 +276,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/Booking/{id}', [AdminDashbordController::class, 'destroy'])->name('delete.Booking');
     });
     Route::middleware('auth:admin')->group(function () {
-Route::get('/admin/editBooking/{id}', [AdminDashbordController::class, 'loadEditFormBooking'])->name('Booking.edit');
-Route::get('/admin/editBooking/{id}', [AdminDashbordController::class, 'editBooking'])->name('Booking.edit');
-Route::match(['put', 'post'], '/admin/updateBooking/{id}', [AdminDashbordController::class, 'updateBooking'])->name('Booking.update');
+    Route::get('/admin/editBooking/{id}', [AdminDashbordController::class, 'loadEditFormBooking'])->name('Booking.edit');
+    Route::get('/admin/editBooking/{id}', [AdminDashbordController::class, 'editBooking'])->name('Booking.edit');
+    Route::match(['put', 'post'], '/admin/updateBooking/{id}', [AdminDashbordController::class, 'updateBooking'])->name('Booking.update');
 
 });
     Route::middleware('auth:admin')->group(function () {
-Route::get('/admin/payments', [PaymentsController::class, 'dashboard'])->name('payments');
+    Route::get('/admin/payments', [PaymentsController::class, 'dashboard'])->name('payments');
 });
+
+    Route::middleware(['auth:admin'])->group(function () {
+    Route::match(['put', 'get'],'/admin/profile/update', [AdminProfileController::class, 'edit'])->name('profile.update');
+    });
+
+    Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+    Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
+
 
 });
 

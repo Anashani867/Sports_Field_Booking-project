@@ -34,9 +34,12 @@ class AdminAuthController extends Controller
     }
 
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::guard('admin')->logout();
-        return redirect()->route('admin.login'); // توجيه إلى صفحة تسجيل الدخول الخاصة بالأدمن
+        Auth::guard('admin')->logout(); // Log out the admin user
+        $request->session()->invalidate(); // Invalidate the session
+        $request->session()->regenerateToken(); // Regenerate the CSRF token
+
+        return redirect()->route('admin.login')->with('status', 'Logged out successfully.');
     }
 }
