@@ -41,6 +41,11 @@ return [
             'provider' => 'users',
         ],
 
+        'user_fields' => [ // Guard خاص بـ Field
+            'driver' => 'session',
+            'provider' => 'user_fields',
+        ],
+
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins', // Ensure this is linked to your admin provider
@@ -70,10 +75,17 @@ return [
             'model' => App\Models\User::class, // Ensure this points to your main user model
         ],
 
+        'user_fields' => [ // Provider خاص بـ Field
+            'driver' => 'eloquent',
+            'model' => App\Models\UserField::class,
+        ],
+
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class, // Ensure this points to your Admin model
         ],
+
+
     ],
 
     /*
@@ -102,6 +114,9 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+
+
         'admins' => [
             'provider' => 'admins',
             'table' => 'password_resets', // You may want a separate table for admins, but this is optional

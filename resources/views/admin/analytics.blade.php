@@ -101,7 +101,7 @@
                     <i class="bi bi-three-dots-vertical"></i> <!-- Icon for dropdown menu -->
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="<?php echo e(route('admin.profile.edit')); ?>">  profile</a></li>
+                    <li><a class="dropdown-item" href="<?php echo e(route('admin.profile.update')); ?>">  profile</a></li>
                     <li>
                         <form method="POST" action="<?php echo e(route('logout')); ?>" class="logout-form">
                             <?php echo csrf_field(); ?>

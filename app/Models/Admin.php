@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory; // Import the HasFactory trait
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as AuthenticateAdmin;
 
-class Admin extends Authenticatable
+class Admin extends AuthenticateAdmin
 {
     use HasFactory; // Use the HasFactory trait
 

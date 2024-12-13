@@ -14,7 +14,7 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="figure">
                             <div class="figure-01">
-                                <img src="{{ asset('assets/images/club-history/club_history01.jpg') }}" alt="Field Image" style="width: 100%; height: auto; border-radius: 10px;">
+                                <img src="{{ asset('storage/' . $field->image) }}" alt="Field Image" style="width: 100%; height: auto; border-radius: 10px;">
                             </div>
                         </div>
                     </div>

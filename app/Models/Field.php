@@ -17,6 +17,7 @@ class Field extends Model
         'location',
         'availability',
         'price',
+        'image',
         'owner_id',
         'admin_id',
         'status',

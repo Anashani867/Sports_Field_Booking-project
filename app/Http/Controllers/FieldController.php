@@ -20,19 +20,67 @@ class FieldController extends Controller
         return view('admin.createField');
     }
 
+//    public function store(Request $request)
+//    {
+//        // التحقق من صحة البيانات
+//        $request->validate([
+//            'field_name' => 'required|string|max:255',   // التحقق من اسم الحقل
+//            'location' => 'required|string',            // التحقق من الموقع
+//            'availability' => 'required|string',        // التحقق من التوفر
+//            'price' => 'required|numeric',              // التحقق من السعر
+//            'owner_id' => 'nullable|exists:users,id',   // التحقق من مالك الحقل
+//            'admin_id' => 'nullable|exists:users,id',   // التحقق من المسؤول
+//            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // التحقق من الصورة
+//        ]);
+//
+//        // إعداد البيانات
+//        $data = $request->all();
+//
+//        // تخزين الصورة إذا تم رفعها
+//        if ($request->hasFile('image')) {
+//            $path = $request->file('image')->store('images', 'public'); // تخزين الصورة في المجلد العام
+//            $data['image'] = $path; // إضافة مسار الصورة إلى البيانات
+//        }
+//
+//        // إنشاء الحقل مع جميع البيانات
+//        Field::create([
+//            'field_name' => $data['field_name'],
+//            'location' => $data['location'],
+//            'availability' => $data['availability'],
+//            'price' => $data['price'],
+//            'owner_id' => $data['owner_id'] ?? null,  // إذا لم يتم توفيره
+//            'admin_id' => $data['admin_id'] ?? null,  // إذا لم يتم توفيره
+//            'image' => $data['image'] ?? null,        // إذا لم يتم رفع صورة
+//        ]);
+//
+//        // إعادة التوجيه مع رسالة نجاح
+////        return redirect()->route('admin.manageFields')->with('success', 'Field added successfully!');
+//        return redirect()->back()->with('success', 'Field added successfully!');
+//
+//    }
+
     public function store(Request $request)
     {
+        // التحقق من صحة البيانات
         $request->validate([
             'field_name' => 'required|string|max:255',
             'location' => 'required|string',
             'availability' => 'required|string',
             'price' => 'required|numeric',
-            'owner_id' => 'nullable|exists:users,id',
-            'admin_id' => 'nullable|exists:users,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        Field::create($request->all());
-        return redirect()->route('admin.manageFields')->with('success', 'Field added successfully!');
+        // معالجة البيانات
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('fields/images', 'public'); // حفظ الصورة في التخزين العام
+            $data['image'] = $path; // تخزين المسار فقط في قاعدة البيانات
+        }
+
+        Field::create($data);
+
+        return redirect()->back()->with('success', 'Field added successfully!');
     }
 
     public function edit($id)

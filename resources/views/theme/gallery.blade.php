@@ -106,7 +106,7 @@
                                         <a href="{{ route('Field.Details', ['id' => $field->id]) }}">View Details</a>
                                             <div class="figure-01">
 {{--                                                <img src="{{ asset('assets/images/gallery/masonry/' . $field->image) }}" alt="{{ $field->field_name }}" class="card-image">--}}
-                                                <img src="{{asset('assets/images/club-history/club_history01.jpg') }}" alt="{{ $field->field_name }}" class="card-image">
+                                                <img src="{{ asset('storage/' . $field->image) }}"  alt="{{ $field->field_name }}" class="card-image">
                                             </div>
                                             <div class="content-01">
                                                 <h6>{{ $field->field_name }}</h6>

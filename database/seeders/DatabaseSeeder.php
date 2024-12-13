@@ -24,9 +24,10 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            UsersTableSeeder::class, // Ensure users are seeded
-            BookingsTableSeeder::class, // Ensure bookings are seeded
-            PaymentsTableSeeder::class, // Add payments
+//            UsersTableSeeder::class, // Ensure users are seeded
+//            BookingsTableSeeder::class, // Ensure bookings are seeded
+//            PaymentsTableSeeder::class, // Add payments
+//            AddUserFieldData::class,
         ]);
 
     }

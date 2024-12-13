@@ -219,6 +219,8 @@ use App\Http\Controllers\FieldController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashbordController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\FieldAuthController;
+use App\Http\Controllers\FieldDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -299,8 +301,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // ----------------- Authenticated User Routes -----------------
 Route::middleware(['auth'])->group(function () {
-    Route::get('/bookTickets', [BookingController::class, 'index'])->name('bookTickets');
-    Route::post('/bookTickets', [BookingController::class, 'bookTickets'])->name('bookTickets');
+    Route::get('/book-tickets', [BookingController::class, 'show'])->name('bookTickets.show');
+    Route::post('/book-tickets', [BookingController::class, 'store'])->name('bookTickets.store');
     Route::get('/field/{id}', [FieldController::class, 'showFieldDetails'])->name('Field.Details');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
@@ -316,6 +318,23 @@ Route::controller(ThemeController::class)->name('theme.')->group(function () {
     Route::get('/contact', 'contact')->name('contact');
     Route::post('/contact/store', 'store')->name('contact.store');
 });
+
+Route::prefix('user_fields')->name('user_fields.')->group(function () {
+    Route::middleware('guest:user_fields')->group(function () {
+        Route::get('login', [FieldAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('login', [FieldAuthController::class, 'login']);
+    });
+
+    Route::middleware('auth:user_fields')->group(function () {
+        Route::get('dashboard', [FieldDashboardController::class, 'index'])->name('dashboard');
+        Route::post('/field/store', [FieldController::class, 'store'])->name('field.store');
+
+        Route::get('logout', [FieldAuthController::class, 'logout'])->name('logout');
+    });
+
+
+});
+
 
 require __DIR__ . '/auth.php';
 
