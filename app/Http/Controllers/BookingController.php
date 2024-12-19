@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Helpers\LocationHelper;
 use App\Traits\LocationTrait;
+use App\Events\BookingCreated;
 
 
 
@@ -82,7 +83,7 @@ class BookingController extends Controller
 
 
         // Store the new booking in the database
-        Booking::create([
+        $booking =  Booking::create([
             'field_id' => $request->input('field_id'),
             'field_name' => $request->input('field_name'),
             'name' => auth()->user()->name,
@@ -95,6 +96,14 @@ class BookingController extends Controller
 //            'location_name' => $locationName, // Save the location name
 
         ]);
+
+//        $booking = Booking::create([
+//            'user_id' => auth()->id(),
+//            'details' => $request->details,
+//        ]);
+
+        // إطلاق الحدث بعد إنشاء الحجز
+        event(new BookingCreated($booking));
 
         // Redirect back with success message
         return redirect()->route('bookTickets')->with('success', 'Booking successful!');
