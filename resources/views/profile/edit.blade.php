@@ -31,7 +31,7 @@
 <div class="card shadow-sm mt-4 border-0">
     <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
         @csrf
-        @method('PUT')
+        @method('PATCH')
         <div class="card-header bg-light">
             <h3 class="fs-5 fw-semibold">Update Profile</h3>
         </div>
