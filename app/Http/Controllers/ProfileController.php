@@ -24,17 +24,21 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // إذا تم رفع صورة جديدة، نقوم بتخزينها
+        if ($request->hasFile('profile_image')) {
+            $path = $request->file('profile_image')->store('profile_images' , 'public');
+            $user->profile_image = $path;
         }
 
-        $request->user()->save();
+        $user->save(); // حفظ التحديثات
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('profile.edit')->with('status', 'تم تحديث الملف الشخصي بنجاح');
     }
 
     /**

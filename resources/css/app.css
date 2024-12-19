@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* تخصيص الألوان الرئيسية */
+.bg-primary {
+    background-color: #00aaff !important;
+}
+
+.card-header {
+    background-color: #00aaff;
+    color: white;
+}
+
+.card-body {
+    background-color: #f8f9fa;
+}
+
+.card-footer {
+    background-color: #f8f9fa;
+}
+
+.btn-primary {
+    background-color: #00aaff;
+    border-color: #00aaff;
+}
+
+/* تخصيص النصوص */
+.text-muted {
+    color: #5c636a !important;
+}
+
+.text-dark {
+    color: #333333 !important;
+}
+
+/* تخصيص صورة البروفايل */
+img.rounded-circle {
+    border-radius: 50%;
+    border: 2px solid #00aaff;
+}
+
+/* تخصيص المظهر العام */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
