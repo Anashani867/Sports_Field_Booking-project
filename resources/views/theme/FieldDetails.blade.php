@@ -22,9 +22,10 @@
                     <!-- تفاصيل الملعب -->
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="content-01">
-                            <h6 class="field-title">Field Name: <span class="field-name">{{ $field->name }}</span></h6>
+                            <h6 class="field-title">Field Name: <span class="field-name">{{ $field->field_name }}</span></h6>
                             <p class="describtion">
                                 <strong>Location:</strong> {{ $field->location }}<br>
+{{--                                <strong>Location:</strong> {{ $field->latitude }}, {{ $field->longitude }}<br>--}}
                                 <strong>Availability:</strong> {{ $field->availability ? 'Available' : 'Not Available' }}<br>
                                 <strong>Price Per Hour:</strong> ${{ $field->price }}
                             </p>
@@ -35,6 +36,16 @@
                         @if (session('success'))
                             <div style="color: green; font-weight: bold; margin-top: 20px;">
                                 {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                         @endif
 

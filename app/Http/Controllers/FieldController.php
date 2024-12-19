@@ -112,6 +112,8 @@ class FieldController extends Controller
     }
 
 
+
+
 //    public function showFieldDetails($id)
 //    {
 //        // جلب تفاصيل الملعب من قاعدة البيانات
@@ -179,6 +181,9 @@ class FieldController extends Controller
         // Add the new availability date if sent from the form
         if ($request->has(['start_date_time', 'end_date_time'])) {
             $request->validate([
+                'field_name' => 'required|string|max:255',
+                'latitude' => 'required|numeric',
+                'longitude' => 'required|numeric',
                 'date_time' => 'required|date',
                 'start_date_time' => 'required|date',
                 'end_date_time' => 'required|date|after_or_equal:start_date_time',
@@ -190,6 +195,7 @@ class FieldController extends Controller
                 'start_date_time' => $request->input('start_date_time'),
                 'end_date_time' => $request->input('end_date_time'),
             ]);
+
         }
 
         // Retrieve booked dates for the given field
@@ -201,6 +207,26 @@ class FieldController extends Controller
             ->get();
 
         return view('theme.FieldDetails', compact('field', 'dates'));
+    }
+
+    public function saveLocation(Request $request , $fieldId)
+    {
+        $field = Field::findOrFail($fieldId);
+
+        $validated = $request->validate([
+            'field_name' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+
+        // حفظ البيانات في قاعدة البيانات
+        $field->update([
+            'field_name' => $validated['field_name'],
+            'latitude' => $validated['latitude'],
+            'longitude' => $validated['longitude'],
+        ]);
+
+        return back()->with('success', 'Location updated successfully!');
     }
 
 }

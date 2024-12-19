@@ -86,16 +86,16 @@
 {{--                                            <span></span></a></li>--}}
                                     <li><a href={{route('theme.contact')}} class=@yield('contact-active')>contact <span></span> <span></span> <span></span>
                                             <span></span></a></li>
-                                    <li><a>error <span></span> <span></span> <span></span> <span></span></a>
-                                        <ul class=sub-menu>
-                                            <li><a href=400.html>400 page</a></li>
-                                            <li><a href=401.html>401 page</a></li>
-                                            <li><a href=403.html>403 page</a></li>
-                                            <li><a href=404.html>404 page</a></li>
-                                            <li><a href=500.html>500 page</a></li>
-                                            <li><a href=503.html>503 page</a></li>
-                                        </ul>
-                                    </li>
+{{--                                    <li><a>error <span></span> <span></span> <span></span> <span></span></a>--}}
+{{--                                        <ul class=sub-menu>--}}
+{{--                                            <li><a href=400.html>400 page</a></li>--}}
+{{--                                            <li><a href=401.html>401 page</a></li>--}}
+{{--                                            <li><a href=403.html>403 page</a></li>--}}
+{{--                                            <li><a href=404.html>404 page</a></li>--}}
+{{--                                            <li><a href=500.html>500 page</a></li>--}}
+{{--                                            <li><a href=503.html>503 page</a></li>--}}
+{{--                                        </ul>--}}
+{{--                                    </li>--}}
                                 </ul>
                             </div>
                         </div>

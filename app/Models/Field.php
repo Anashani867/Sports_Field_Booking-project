@@ -21,6 +21,8 @@ class Field extends Model
         'owner_id',
         'admin_id',
         'status',
+        'latitude',
+        'longitude',
     ];
 
 

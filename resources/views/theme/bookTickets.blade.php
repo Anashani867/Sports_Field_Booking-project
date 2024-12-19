@@ -276,9 +276,13 @@
                                         <li>{{ $loop->iteration }}</li>
                                         <li>
                                             <div class="headline01 clearfix">
-                                                <span>{{ $booking->team_one }}</span>
-                                                <span class="vs">vs</span>
-                                                <span>{{ $booking->team_two }}</span>
+                                                <span>{{ isset($booking->field) ? $booking->field->field_name : 'No field' }}</span>
+{{--                                                <span class="vs">vs</span>--}}
+{{--                                              <p><strong>Location:</strong> Latitude: {{ $booking->field->latitude}}, Longitude: {{ $field->longitude }}                                            </div>  <div class="headline01 clearfix">--}}
+{{--                                                <span>{{ $booking->team_one }}</span>--}}
+{{--                                                <span class="vs">vs</span>--}}
+{{--                                                <span>{{ $booking->team_two }}</span>--}}
+{{--                                            </div>--}}
                                             </div>
                                             <div class="ticketInner_info paragraph02 clearfix">
                                                 <!-- عرض التاريخ -->
@@ -287,15 +291,15 @@
                                                 <span>{{ \Carbon\Carbon::parse($booking->start_date_time)->format('H:i A') }}</span>
                                                 <span>{{ \Carbon\Carbon::parse($booking->end_date_time)->format('H:i A') }}</span>
                                                 <!-- عرض اسم المكان -->
+                                                <span class="capitalize01">Latitude: {{ $booking->field->latitude }}, Longitude: {{ $booking->field->longitude }}</span>
+{{--                                                <span class="capitalize01">{{ $booking->location_name  ?? 'Unknown Location' }}</span>--}}
                                                 <span class="capitalize01">{{ $booking->field->location ?? 'Unknown Location' }}</span>
                                             </div>
                                         </li>
                                         <li>
-                                            @if($booking->is_sold_out)
-                                                <a href="#" class="btn-small01 btn-red">Sold Out</a>
-                                            @else
-                                                <a href="{{ route('bookTickets', ['booking_id' => $booking->id]) }}" class="btn-small01 btn-green">Book Tickets</a>
-                                            @endif
+                                                <a href="javascript:void(0);" class="btn-small01 btn-green" onclick="getLocationAndRedirect({{ $booking->field->latitude }}, {{ $booking->field->longitude  }})">
+                                                    Book Tickets
+                                                </a>
                                         </li>
                                     </ul>
                                 </li>
@@ -313,4 +317,28 @@
             </div>
         </div>
     </section>
+    <script>
+        // دالة للحصول على الموقع الجغرافي للمستخدم وإعادة التوجيه إلى Google Maps أو OpenStreetMap
+        function getLocationAndRedirect(lat, lon) {
+            if (navigator.geolocation) {
+                // إذا كانت الميزة مدعومة في المتصفح
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    // إحداثيات موقع المستخدم
+                    var userLat = position.coords.latitude;
+                    var userLon = position.coords.longitude;
+
+                    // الآن يمكننا توجيه المستخدم إلى الموقع المطلوب على الخريطة
+                    var mapUrl = 'https://www.google.com/maps/dir/' + userLat + ',' + userLon + '/' + lat + ',' + lon;
+
+                    // إعادة التوجيه إلى Google Maps
+                    window.location.href = mapUrl;
+                }, function(error) {
+                    alert("Unable to retrieve your location. Please enable GPS.");
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+    </script>
+
 @endsection
