@@ -222,6 +222,7 @@ use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\FieldAuthController;
 use App\Http\Controllers\FieldDashboardController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -334,6 +335,13 @@ Route::prefix('user_fields')->name('user_fields.')->group(function () {
 
 
 });
+
+Auth::routes(['verify' => true]);
+
+// Example of a verified route
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
 
 
 require __DIR__ . '/auth.php';
