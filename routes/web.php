@@ -223,6 +223,8 @@ use App\Http\Controllers\FieldAuthController;
 use App\Http\Controllers\FieldDashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Auth\VerificationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -343,6 +345,9 @@ Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
+Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 
 require __DIR__ . '/auth.php';
 
