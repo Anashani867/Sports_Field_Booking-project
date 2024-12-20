@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -25,10 +24,23 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // محاولة التوثيق باستخدام البيانات المدخلة
         $request->authenticate();
 
+        // الحصول على المستخدم الحالي
+        $user = Auth::user();
+
+        // التحقق من إذا كان البريد الإلكتروني مفعلًا
+        if (!$user->hasVerifiedEmail()) {
+            // إذا لم يكن البريد الإلكتروني مفعلًا، قم بتسجيل الخروج وإعادة التوجيه إلى صفحة التحقق
+            Auth::logout();
+            return redirect()->route('verification.notice'); // التأكد من وجود هذه الصفحة
+        }
+
+        // إذا تم التحقق من البريد الإلكتروني بنجاح، قم بتجديد الجلسة
         $request->session()->regenerate();
 
+        // إعادة التوجيه إلى الصفحة المقصودة بعد تسجيل الدخول
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -45,7 +57,4 @@ class AuthenticatedSessionController extends Controller
 
         return redirect()->route('welcome'); // توجيه المستخدم إلى صفحة تسجيل الدخول
     }
-
-
-
 }

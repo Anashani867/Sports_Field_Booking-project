@@ -19,6 +19,11 @@ class EmailVerificationController extends Controller
     {
         $request->fulfill();
 
+        $user = $request->user();
+
+        $user->update(['status' => 'Active']);
+
+
         return redirect('/')->with('success', 'Your email has been verified!');
     }
 

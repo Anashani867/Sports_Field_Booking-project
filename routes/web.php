@@ -222,7 +222,7 @@ use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\FieldAuthController;
 use App\Http\Controllers\FieldDashboardController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\VerificationController;
 
 
@@ -348,6 +348,15 @@ Route::get('/email/verify', function () {
 Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
 Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+
+
+Route::get('email/verify', [EmailVerificationController::class, 'notice'])->name('verification.notice');
+
+// مسار تحقق الرابط
+Route::get('email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->name('verification.verify');
+// مسار إعادة إرسال رابط التحقق
+Route::post('email/verification-link', [EmailVerificationController::class, 'resend'])->name('verification.send');
 
 require __DIR__ . '/auth.php';
 
