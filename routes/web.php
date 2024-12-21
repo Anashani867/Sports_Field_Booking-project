@@ -358,5 +358,12 @@ Route::get('email/verify/{id}/{hash}', [EmailVerificationController::class, 'ver
 // مسار إعادة إرسال رابط التحقق
 Route::post('email/verification-link', [EmailVerificationController::class, 'resend'])->name('verification.send');
 
+
+Route::get('/book/{field_id}', [BookingController::class, 'showBookingForm'])->name('bookForm');
+Route::post('/book-and-pay', [PaymentsController::class, 'bookAndPay'])->name('bookAndPay');
+Route::get('/payment', [PaymentsController::class, 'showPaymentForm'])->name('payment.form');
+//Route::post('/payment/process', [PaymentsController::class, 'processPayment'])->name('payment.process');
+
+
 require __DIR__ . '/auth.php';
 

@@ -268,6 +268,18 @@
 
                 <div class="innerWrapper">
                     <aside class="contentinner">
+                        @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if(session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
                         <div class="bg-red headline01">Most Popular Match Tickets</div>
                         <ul class="ticketInfo">
                             @foreach($bookings as $booking)
@@ -288,8 +300,10 @@
                                                 <!-- عرض التاريخ -->
                                                 <span>{{ \Carbon\Carbon::parse($booking->date_time)->toFormattedDateString() }}</span>
                                                 <!-- عرض وقت البداية والنهاية -->
-                                                <span>{{ \Carbon\Carbon::parse($booking->start_date_time)->format('H:i A') }}</span>
-                                                <span>{{ \Carbon\Carbon::parse($booking->end_date_time)->format('H:i A') }}</span>
+
+
+                                                <span>{{ \Carbon\Carbon::parse($booking->start_date_time)->format('h:i A') }}</span>
+                                                <span>{{ \Carbon\Carbon::parse($booking->end_date_time)->format('h:i A') }}</span>
                                                 <!-- عرض اسم المكان -->
                                                 <span class="capitalize01">Latitude: {{ $booking->field->latitude }}, Longitude: {{ $booking->field->longitude }}</span>
 {{--                                                <span class="capitalize01">{{ $booking->location_name  ?? 'Unknown Location' }}</span>--}}

@@ -184,14 +184,12 @@ class FieldController extends Controller
                 'field_name' => 'required|string|max:255',
                 'latitude' => 'required|numeric',
                 'longitude' => 'required|numeric',
-                'date_time' => 'required|date',
                 'start_date_time' => 'required|date',
                 'end_date_time' => 'required|date|after_or_equal:start_date_time',
             ]);
 
             AvailableDate::create([
                 'field_id' => $fieldId,
-                'date_time' => $request->input('date_time'),
                 'start_date_time' => $request->input('start_date_time'),
                 'end_date_time' => $request->input('end_date_time'),
             ]);
@@ -199,10 +197,10 @@ class FieldController extends Controller
         }
 
         // Retrieve booked dates for the given field
-        $bookedDates = Booking::where('field_id', $fieldId)->pluck('date_time')->toArray();
+        $bookedDates = Booking::where('field_id', $fieldId)->pluck('created_at')->toArray();
 
         // Retrieve available dates excluding booked ones
-        $dates = AvailableDate::whereNotIn('date_time', $bookedDates)
+        $dates = AvailableDate::whereNotIn('created_at', $bookedDates)
             ->where('field_id', $fieldId)
             ->get();
 

@@ -24,7 +24,8 @@ class ThemeController extends Controller
     }  public function gallery()
 {
     $fields = Field::all();
-    return view('theme.gallery', compact('fields'));
+    $uniqueLocations = $fields->pluck('location')->unique();
+    return view('theme.gallery', compact('fields', 'uniqueLocations'));
 //        return view('theme.gallery');
 
 }  public function blog()

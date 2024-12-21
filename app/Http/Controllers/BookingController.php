@@ -45,69 +45,69 @@ class BookingController extends Controller
 //    }
 //    use LocationTrait;
 
-    public function bookTickets(Request $request)
-    {
-        // Validate the data coming from the form
-        $validated = $request->validate([
-            'field_id' => 'required|integer',
-            'booking_date' => 'required|date',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time', // Ensure end time is after start time
-        ]);
-
-        // Combine date and time to create full DateTime
-        $startDateTime = $request->input('booking_date') . ' ' . $request->input('start_time');
-        $endDateTime = $request->input('booking_date') . ' ' . $request->input('end_time');
-
-        // Check if the desired time slot is already booked
-        $existingBooking = Booking::where('field_id', $request->input('field_id'))
-            ->where(function($query) use ($startDateTime, $endDateTime) {
-                $query->whereBetween('start_date_time', [$startDateTime, $endDateTime])
-                    ->orWhereBetween('end_date_time', [$startDateTime, $endDateTime]);
-            })
-            ->exists();
-
-        if ($existingBooking) {
-            return redirect()->back()->with('error', 'This time slot is already booked!');
-        }
-
-//        $field = Field::find($request->input('field_id'));
-//
-//        if (!$field) {
-//            return redirect()->back()->with('error', 'Field not found!');
-//        }
-//        $latitude = $field->latitude;
-//        $longitude = $field->longitude;
-//
-//        $locationName = $this->getLocationNameFromOSM($latitude, $longitude);
-
-
-        // Store the new booking in the database
-        $booking =  Booking::create([
-            'field_id' => $request->input('field_id'),
-            'field_name' => $request->input('field_name'),
-            'name' => auth()->user()->name,
-            'start_date_time' => $startDateTime,
-            'end_date_time' => $endDateTime,
-            'date_time' => $startDateTime,  // Ensure this field is populated
-            'user_id' => auth()->id(), // Associate the booking with the logged-in user
-            'latitude' => $request->input('latitude'), // إضافة الموقع
-            'longitude' => $request->input('longitude'), // إضافة الموقع
-//            'location_name' => $locationName, // Save the location name
-
-        ]);
-
-//        $booking = Booking::create([
-//            'user_id' => auth()->id(),
-//            'details' => $request->details,
+//    public function bookTickets(Request $request)
+//    {
+//        // Validate the data coming from the form
+//        $validated = $request->validate([
+//            'field_id' => 'required|integer',
+//            'booking_date' => 'required|date',
+//            'start_time' => 'required|date_format:H:i',
+//            'end_time' => 'required|date_format:H:i|after:start_time', // Ensure end time is after start time
 //        ]);
-
-        // إطلاق الحدث بعد إنشاء الحجز
-        event(new BookingCreated($booking));
-
-        // Redirect back with success message
-        return redirect()->route('bookTickets')->with('success', 'Booking successful!');
-    }
+//
+//        // Combine date and time to create full DateTime
+//        $startDateTime = $request->input('booking_date') . ' ' . $request->input('start_time');
+//        $endDateTime = $request->input('booking_date') . ' ' . $request->input('end_time');
+//
+//        // Check if the desired time slot is already booked
+//        $existingBooking = Booking::where('field_id', $request->input('field_id'))
+//            ->where(function($query) use ($startDateTime, $endDateTime) {
+//                $query->whereBetween('start_date_time', [$startDateTime, $endDateTime])
+//                    ->orWhereBetween('end_date_time', [$startDateTime, $endDateTime]);
+//            })
+//            ->exists();
+//
+//        if ($existingBooking) {
+//            return redirect()->back()->with('error', 'This time slot is already booked!');
+//        }
+//
+////        $field = Field::find($request->input('field_id'));
+////
+////        if (!$field) {
+////            return redirect()->back()->with('error', 'Field not found!');
+////        }
+////        $latitude = $field->latitude;
+////        $longitude = $field->longitude;
+////
+////        $locationName = $this->getLocationNameFromOSM($latitude, $longitude);
+//
+//
+//        // Store the new booking in the database
+//        $booking =  Booking::create([
+//            'field_id' => $request->input('field_id'),
+//            'field_name' => $request->input('field_name'),
+//            'name' => auth()->user()->name,
+//            'start_date_time' => $startDateTime,
+//            'end_date_time' => $endDateTime,
+//            'date_time' => $startDateTime,  // Ensure this field is populated
+//            'user_id' => auth()->id(), // Associate the booking with the logged-in user
+//            'latitude' => $request->input('latitude'), // إضافة الموقع
+//            'longitude' => $request->input('longitude'), // إضافة الموقع
+////            'location_name' => $locationName, // Save the location name
+//
+//        ]);
+//
+////        $booking = Booking::create([
+////            'user_id' => auth()->id(),
+////            'details' => $request->details,
+////        ]);
+//
+//        // إطلاق الحدث بعد إنشاء الحجز
+//        event(new BookingCreated($booking));
+//
+//        // Redirect back with success message
+//        return redirect()->route('bookTickets')->with('success', 'Booking successful!');
+//    }
 
 
 

@@ -77,6 +77,181 @@
 {{--        </div>--}}
 {{--    </section>--}}
 {{--@endsection--}}
+
+
+
+
+{{--@extends('theme.master')--}}
+
+{{--@section('hero-title')--}}
+{{--    <span>Field </span>Booking--}}
+{{--@endsection--}}
+
+{{--@section('gallery-active', 'active')--}}
+
+{{--@section('content')--}}
+
+{{--    <div class="wrapper">--}}
+{{--        <section class="innerpage_all_wrap">--}}
+{{--            <div class="container">--}}
+{{--                <h2 class="table-title">Field Booking Cards</h2>--}}
+{{--                <div class="LatestNews_wrap clearfix">--}}
+{{--                    <ul class="nav accordion-news" role="tablist">--}}
+{{--                        <li class="active">--}}
+{{--                            <a href="#club_news" aria-controls="club_news" role="tab" data-toggle="tab">Available Fields</a>--}}
+{{--                        </li>--}}
+{{--                    </ul>--}}
+
+{{--                    <div class="tab-content news_display_container clearfix">--}}
+{{--                        <a class="prv club_prev"></a> <a class="nxt club_next"></a>--}}
+
+{{--                        <ul id="club_news" class="tab-pane active row">--}}
+{{--                            @foreach($fields as $field)--}}
+{{--                                <li class="field-card col-lg-6 col-md-6 col-sm-12 mb-4">--}}
+{{--                                    <div class="card">--}}
+{{--                                        <a class="card-link" href="{{ route('Field.Details', ['id' => $field->id]) }}">--}}
+{{--                                            <div class="figure-01">--}}
+{{--                                                <img src="{{ asset('assets/images/gallery/masonry/' . $field->image) }}" alt="{{ $field->field_name }}" class="card-image">--}}
+{{--                                                <img src="{{ asset('storage/' . $field->image) }}"  alt="{{ $field->field_name }}" class="card-image">--}}
+{{--                                            </div>--}}
+{{--                                            <div class="content-01">--}}
+{{--                                                <h6>{{ $field->field_name }}</h6>--}}
+{{--                                                <p class="red_p">Stories of the legends</p>--}}
+{{--                                                <p class="describtion">--}}
+{{--                                                    <strong>Location:</strong> {{ $field->location }}<br>--}}
+{{--                                                    <strong>Availability:</strong> {{ $field->availability }}<br>--}}
+{{--                                                    <strong>Price per Hour:</strong> ${{ $field->price }}--}}
+{{--                                                </p>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="news_date clearfix">--}}
+{{--                                                <span>{{ $field->availability }}</span>--}}
+{{--                                                <span class="like">❤ 45</span>--}}
+{{--                                            </div>--}}
+{{--                                        </a>--}}
+{{--                                    </div>--}}
+{{--                                </li>--}}
+{{--                            @endforeach--}}
+{{--                        </ul>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </section>--}}
+{{--    </div>--}}
+
+{{--@endsection--}}
+
+{{--<style>--}}
+{{--    /* General Styling for Field Cards */--}}
+{{--    .news_display_container ul {--}}
+{{--        list-style-type: none;--}}
+{{--        padding: 0;--}}
+{{--        margin: 0;--}}
+{{--    }--}}
+
+{{--    .news_display_container ul li {--}}
+{{--        padding: 20px;--}}
+{{--        background-color: #f9f9f9;--}}
+{{--        border-radius: 12px;--}}
+{{--        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);--}}
+{{--        transition: all 0.3s ease;--}}
+{{--    }--}}
+
+{{--    .news_display_container ul li:hover {--}}
+{{--        transform: translateY(-15px);--}}
+{{--        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);--}}
+{{--    }--}}
+
+{{--    .card-link {--}}
+{{--        text-decoration: none;--}}
+{{--        color: inherit;--}}
+{{--    }--}}
+
+{{--    .figure-01 img {--}}
+{{--        width: 100%;--}}
+{{--        height: 400px; /* Increased image height for larger cards */--}}
+{{--        object-fit: cover;--}}
+{{--        border-radius: 12px;--}}
+{{--    }--}}
+
+{{--    .content-01 {--}}
+{{--        padding: 25px 30px;--}}
+{{--    }--}}
+
+{{--    .content-01 h6 {--}}
+{{--        font-size: 2rem; /* Increased font size for titles */--}}
+{{--        font-weight: bold;--}}
+{{--        margin-bottom: 20px;--}}
+{{--        color: #333;--}}
+{{--    }--}}
+
+{{--    .content-01 .red_p {--}}
+{{--        color: #f1c40f;--}}
+{{--        font-size: 1.2rem;--}}
+{{--        margin-bottom: 20px;--}}
+{{--    }--}}
+
+{{--    .content-01 .describtion {--}}
+{{--        font-size: 1.1rem;--}}
+{{--        line-height: 1.5;--}}
+{{--        color: #555;--}}
+{{--    }--}}
+
+{{--    .news_date {--}}
+{{--        display: flex;--}}
+{{--        justify-content: space-between;--}}
+{{--        margin-top: 20px;--}}
+{{--        font-size: 1rem;--}}
+{{--        color: #999;--}}
+{{--    }--}}
+
+{{--    .news_date .like {--}}
+{{--        font-size: 1.2rem;--}}
+{{--        color: #f1c40f;--}}
+{{--    }--}}
+
+{{--    /* Grid Layout for Cards */--}}
+{{--    .row {--}}
+{{--        display: flex;--}}
+{{--        flex-wrap: wrap;--}}
+{{--        gap: 30px; /* Increased spacing between rows */--}}
+{{--    }--}}
+
+{{--    .col-lg-6,--}}
+{{--    .col-md-6 {--}}
+{{--        flex: 0 0 50%;--}}
+{{--        max-width: 50%;--}}
+{{--    }--}}
+
+{{--    .col-sm-12 {--}}
+{{--        flex: 0 0 100%;--}}
+{{--        max-width: 100%;--}}
+{{--    }--}}
+
+{{--    .mb-4 {--}}
+{{--        margin-bottom: 2rem; /* Increased margin between cards */--}}
+{{--    }--}}
+
+{{--    /* Small screens */--}}
+{{--    @media (max-width: 576px) {--}}
+{{--        .col-lg-6,--}}
+{{--        .col-md-6,--}}
+{{--        .col-sm-12 {--}}
+{{--            flex: 0 0 100%;--}}
+{{--            max-width: 100%;--}}
+{{--        }--}}
+
+{{--        .figure-01 img {--}}
+{{--            height: 300px; /* Adjust image height for smaller screens */--}}
+{{--        }--}}
+
+{{--        .content-01 h6 {--}}
+{{--            font-size: 1.6rem; /* Adjust title size for smaller screens */--}}
+{{--        }--}}
+{{--    }--}}
+{{--</style>--}}
+
+
+
 @extends('theme.master')
 
 @section('hero-title')
@@ -91,6 +266,42 @@
         <section class="innerpage_all_wrap">
             <div class="container">
                 <h2 class="table-title">Field Booking Cards</h2>
+
+                <!-- Filters Section -->
+                <div class="filters">
+                    <h4>Filters</h4>
+                    <form>
+                        <div class="form-group">
+                            <label for="locationFilter">Location</label>
+                            <select id="locationFilter" class="form-control">
+                                <option value="">All Locations</option>
+                                @foreach($uniqueLocations as $location)
+                                    <option value="{{ $location }}">{{ $location }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="availabilityFilter">Availability</label>
+                            <select id="availabilityFilter" class="form-control">
+                                <option value="">All Availability</option>
+                                <option value="Available">Available</option>
+                                <option value="Not Available">Not Available</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="minPrice">Price Range</label>
+                            <div class="d-flex">
+                                <input type="number" id="minPrice" class="form-control mr-2" placeholder="Min Price">
+                                <input type="number" id="maxPrice" class="form-control" placeholder="Max Price">
+                            </div>
+                        </div>
+
+                        <button type="button" id="filterButton" class="btn btn-primary">Apply Filters</button>
+                    </form>
+                </div>
+
                 <div class="LatestNews_wrap clearfix">
                     <ul class="nav accordion-news" role="tablist">
                         <li class="active">
@@ -103,10 +314,9 @@
                             @foreach($fields as $field)
                                 <li class="field-card col-lg-6 col-md-6 col-sm-12 mb-4">
                                     <div class="card">
-                                        <a href="{{ route('Field.Details', ['id' => $field->id]) }}">View Details</a>
+                                        <a class="card-link" href="{{ route('Field.Details', ['id' => $field->id]) }}">
                                             <div class="figure-01">
-{{--                                                <img src="{{ asset('assets/images/gallery/masonry/' . $field->image) }}" alt="{{ $field->field_name }}" class="card-image">--}}
-                                                <img src="{{ asset('storage/' . $field->image) }}"  alt="{{ $field->field_name }}" class="card-image">
+                                                <img src="{{ asset('storage/' . $field->image) }}" alt="{{ $field->field_name }}" class="card-image">
                                             </div>
                                             <div class="content-01">
                                                 <h6>{{ $field->field_name }}</h6>
@@ -135,7 +345,28 @@
 @endsection
 
 <style>
-    /* General Styling for Field Cards */
+    .filters {
+        padding: 20px;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .filters h4 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    .filters .form-group {
+        margin-bottom: 15px;
+    }
+
+    .filters .btn {
+        display: block;
+        width: 100%;
+    }
+
     .news_display_container ul {
         list-style-type: none;
         padding: 0;
@@ -162,7 +393,7 @@
 
     .figure-01 img {
         width: 100%;
-        height: 400px; /* Increased image height for larger cards */
+        height: 400px;
         object-fit: cover;
         border-radius: 12px;
     }
@@ -172,7 +403,7 @@
     }
 
     .content-01 h6 {
-        font-size: 2rem; /* Increased font size for titles */
+        font-size: 2rem;
         font-weight: bold;
         margin-bottom: 20px;
         color: #333;
@@ -203,11 +434,10 @@
         color: #f1c40f;
     }
 
-    /* Grid Layout for Cards */
     .row {
         display: flex;
         flex-wrap: wrap;
-        gap: 30px; /* Increased spacing between rows */
+        gap: 30px;
     }
 
     .col-lg-6,
@@ -222,10 +452,9 @@
     }
 
     .mb-4 {
-        margin-bottom: 2rem; /* Increased margin between cards */
+        margin-bottom: 2rem;
     }
 
-    /* Small screens */
     @media (max-width: 576px) {
         .col-lg-6,
         .col-md-6,
@@ -235,11 +464,37 @@
         }
 
         .figure-01 img {
-            height: 300px; /* Adjust image height for smaller screens */
+            height: 300px;
         }
 
         .content-01 h6 {
-            font-size: 1.6rem; /* Adjust title size for smaller screens */
+            font-size: 1.6rem;
         }
     }
 </style>
+
+<script>
+    document.getElementById('filterButton').addEventListener('click', function() {
+        const location = document.getElementById('locationFilter').value;
+        const availability = document.getElementById('availabilityFilter').value;
+        const minPrice = document.getElementById('minPrice').value;
+        const maxPrice = document.getElementById('maxPrice').value;
+
+        const fieldCards = document.querySelectorAll('.field-card');
+        fieldCards.forEach(card => {
+            const cardLocation = card.querySelector('.describtion').innerText.split('Location: ')[1].split('\n')[0].trim();
+            const cardAvailability = card.querySelector('.describtion').innerText.split('Availability: ')[1].split('\n')[0].trim();
+            const cardPrice = parseFloat(card.querySelector('.describtion').innerText.split('Price per Hour: $')[1].trim());
+
+            if ((location && cardLocation !== location) ||
+                (availability && cardAvailability !== availability) ||
+                (minPrice && cardPrice < minPrice) ||
+                (maxPrice && cardPrice > maxPrice)) {
+                card.style.display = 'none';
+            } else {
+                card.style.display = 'block';
+            }
+        });
+    });
+
+</script>
