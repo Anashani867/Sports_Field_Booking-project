@@ -305,7 +305,8 @@
                                                 <span>{{ \Carbon\Carbon::parse($booking->start_date_time)->format('h:i A') }}</span>
                                                 <span>{{ \Carbon\Carbon::parse($booking->end_date_time)->format('h:i A') }}</span>
                                                 <!-- عرض اسم المكان -->
-                                                <span class="capitalize01">Latitude: {{ $booking->field->latitude }}, Longitude: {{ $booking->field->longitude }}</span>
+                                                <span class="capitalize01">Latitude:     Latitude: {{ $booking->field->latitude ?? 'Not available' }},
+, Longitude: {{ $booking->field->longitude ?? 'Not available' }}</span>
 {{--                                                <span class="capitalize01">{{ $booking->location_name  ?? 'Unknown Location' }}</span>--}}
                                                 <span class="capitalize01">{{ $booking->field->location ?? 'Unknown Location' }}</span>
                                             </div>

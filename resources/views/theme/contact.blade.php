@@ -41,27 +41,15 @@
                         amet .</p>
 
 
-                    <form data-parsley-validate="" name=contact class="formcontact clearfix" action="{{ route('theme.contact.store') }}" method="POST">
-
-
-
-
+                    <form data-parsley-validate="" name="contact" class="formcontact clearfix" action="{{ route('theme.contact.store') }}" method="POST">
                         @if(session('success'))
                             <div style="color: red">
-                                {{session('success')}}
+                                {{ session('success') }}
                             </div>
                         @endif
 
                         @csrf
-{{--                        @if ($errors->any())--}}
-{{--                            <div class="alert alert-danger">--}}
-{{--                                <ul>--}}
-{{--                                    @foreach ($errors->all() as $error)--}}
-{{--                                        <li>{{ $error }}</li>--}}
-{{--                                    @endforeach--}}
-{{--                                </ul>--}}
-{{--                            </div>--}}
-{{--                        @endif--}}
+
                         <div class="form-group">
                             <input type="text" class="form-control" name="name" placeholder="Name" required
                                    data-parsley-required-message="Please insert Name" value="{{ old('name') }}">
@@ -94,21 +82,26 @@
                             @enderror
                         </div>
 
-                        <div class=form-group1>
-
-                            <textarea class="form-control textas" name=message placeholder=Message
-                                                         required="" data-parsley-minlength=20
-                                                         data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment.."
-                                                         data-parsley-validation-threshold=10
-                                                         data-parsley-maxlength=100>{{old('message')}}</textarea>
-
+                        <div class="form-group1">
+        <textarea class="form-control textas" name="message" placeholder="Message"
+                  required data-parsley-minlength="20"
+                  data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment.."
+                  data-parsley-validation-threshold="10"
+                  data-parsley-maxlength="100">{{ old('message') }}</textarea>
                             @error('message')
-                            <span style="color: red">{{$message}}</span>
+                            <span style="color: red">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <button type=submit class="btn btn-red" id=send>send Us</button>
-                        <div class=form-message></div>
+                        <!-- إضافة checkbox لاختيار عرض التعليق في "Recent Comments" -->
+                            <div class="form-group">
+                                <input type="checkbox" name="is_public" id="is_public" value="1" {{ old('is_public', $contact->is_public ?? 0) ? 'checked' : '' }}>
+                                <label for="is_public" style="color: whitesmoke">Display my comment in the Recent Comments section</label>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-red" id="send">Send Us</button>
+                        <div class="form-message"></div>
                     </form>
 
 

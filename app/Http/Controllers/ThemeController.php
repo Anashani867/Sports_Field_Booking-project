@@ -59,10 +59,22 @@ class ThemeController extends Controller
     {
         $validatedData = $request->validated();
 
+        // تحديد ما إذا كان يجب عرض التعليق في Recent Comments
+        $validatedData['is_public'] = $request->has('is_public') ? true : false;
 
+        $validatedData['phone_number'] = json_encode([
+            'mobile' => $validatedData['phone_number']
+        ]);
+
+        // حفظ البيانات في قاعدة البيانات
         Contact::create($validatedData);
+//        dd($request->all()); // هذا سيمكنك من رؤية كل البيانات المرسلة من النموذج
 
-        return back()->with('success', 'Thanks for contacting us!');
+
+        return redirect()->back()->with('success', 'Your message has been sent successfully.');
+    }
+
+
 
 //        dd($validatedData);
 
@@ -125,7 +137,7 @@ class ThemeController extends Controller
 //            'phone.digits_between' => 'The phone number must be between 9 and 15 digits.',
 //            'phone.regex' => 'The phone number must contain only numbers.',
 //        ]);
-    }
+
 }
 
 

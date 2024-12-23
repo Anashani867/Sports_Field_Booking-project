@@ -88,34 +88,31 @@ class PaymentsController extends Controller
 
     public function bookAndPay(Request $request)
     {
-        // Validate the other request data
+        // Step 1: Validate the request data
         $validatedData = $request->validate([
             'field_id' => 'required|exists:fields,id',
             'booking_date' => 'required|date',
             'start_date_time' => 'required|date_format:H:i',
             'end_date_time' => 'required|date_format:H:i|after:start_date_time',
             'payment_method' => 'required|string|in:credit_card,paypal',
-            'amount' => 'required|numeric|min:0'        ]);
+            'amount' => 'required|numeric|min:0',
+        ]);
 
-
-        // Format the start and end date-time
+        // Step 2: Format the start and end date-time
         $startDateTime = $request->input('booking_date') . ' ' . $request->input('start_date_time');
         $endDateTime = $request->input('booking_date') . ' ' . $request->input('end_date_time');
 
-        // Check if the field exists and get the latitude and longitude
+        // Step 3: Retrieve the field and its location data
         $field = Field::findOrFail($request->input('field_id'));
         $latitude = $field->latitude;
         $longitude = $field->longitude;
 
-        // Check for overlapping bookings: Start or End Time Intersecting with Existing Booking
+        // Step 4: Check for overlapping bookings
         $existingBooking = Booking::where('field_id', $request->input('field_id'))
-            ->where(function($query) use ($startDateTime, $endDateTime) {
-                // Case where the new start time is between an existing booking's start and end time
+            ->where(function ($query) use ($startDateTime, $endDateTime) {
                 $query->whereBetween('start_date_time', [$startDateTime, $endDateTime])
-                    // Case where the new end time is between an existing booking's start and end time
                     ->orWhereBetween('end_date_time', [$startDateTime, $endDateTime])
-                    // Case where the new time range fully contains an existing booking's time range
-                    ->orWhere(function($query2) use ($startDateTime, $endDateTime) {
+                    ->orWhere(function ($query2) use ($startDateTime, $endDateTime) {
                         $query2->where('start_date_time', '<=', $startDateTime)
                             ->where('end_date_time', '>=', $endDateTime);
                     });
@@ -126,7 +123,7 @@ class PaymentsController extends Controller
             return redirect()->back()->with('error', 'This time slot is already booked!');
         }
 
-        // Create the booking
+        // Step 5: Create the booking
         $booking = Booking::create([
             'field_id' => $request->input('field_id'),
             'user_id' => auth()->id(),
@@ -140,7 +137,7 @@ class PaymentsController extends Controller
             'longitude' => $longitude, // Retrieved from the field
         ]);
 
-        // Process payment
+        // Step 6: Process the payment
         $paymentStatus = $this->processPayment($request->payment_method, $request->amount);
 
         if ($paymentStatus) {
@@ -156,14 +153,18 @@ class PaymentsController extends Controller
                 'payment_method' => $request->payment_method,
                 'payment_status' => 'paid',
             ]);
+
+            // Trigger the BookingCreated event
             event(new BookingCreated($booking));
+
 
             return redirect()->route('bookTickets')->with('success', 'Booking successful and payment completed!');
         }
 
+
+        // If payment fails, redirect back with an error
         return redirect()->back()->with('error', 'Payment failed, please try again!');
-    }
-//public function processPayment(Request $request)
+    }//public function processPayment(Request $request)
 //{
 //    $validatedData = $request->validate([
 //        'payment_method_id' => 'required',

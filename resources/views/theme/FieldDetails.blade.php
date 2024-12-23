@@ -288,13 +288,13 @@
                         @endif
 
 
-                        {{--                        <span class="capitalize01">--}}
-{{--                            @if ($field->latitude && $field->longitude)--}}
-{{--                                Latitude: {{ $field->latitude }}, Longitude: {{ $field->longitude }}--}}
-{{--                            @else--}}
-{{--                                Latitude and Longitude not available.--}}
-{{--                            @endif--}}
-{{--                        </span>--}}
+                                                <span class="capitalize01">
+                            @if ($field->latitude && $field->longitude)
+                                Latitude: {{ $field->latitude }}, Longitude: {{ $field->longitude }}
+                            @else
+                                Latitude and Longitude not available.
+                            @endif
+                        </span>
 
                         <!-- زر الحجز -->
                         <div class="news_date clearfix">

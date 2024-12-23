@@ -23,6 +23,7 @@ class BookingController extends Controller
         $bookings = Booking::where('user_id', auth()->id())->with('field')->get(); // Eager load 'field' relation
 
 
+//        dd($bookings);
 
         return view('theme.bookTickets', compact('bookings'));
     }

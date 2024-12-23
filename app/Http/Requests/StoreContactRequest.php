@@ -28,8 +28,9 @@ class StoreContactRequest extends FormRequest
 //            'phone' => ['required', 'digits_between:9,15', 'regex:/^[0-9]+$/'],
 
             'subject' => ['required', 'string', 'max:150'],
-            'message' => ['required', 'string', 'min:10', 'max:1000']
+            'message' => ['required', 'string', 'min:10', 'max:1000'] ,
 //                        'comment' => ['nullable'],
+             'is_public' => ['nullable', 'boolean'],
         ];
     }
 

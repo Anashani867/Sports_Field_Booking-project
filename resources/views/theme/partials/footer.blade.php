@@ -49,41 +49,71 @@
                         <li><a href="#">glass</a></li>
                     </ul>
                 </li>
-                <li class=widget-comment><h4 class=footerheading>recent <span>comments</span></h4>
-                    <ul class=widget_commentDetails>
-                        <li><a href=# class=clearfix>
-                                <div class=comment-pic>
-                                    <div class=columnpic><img src={{asset('assets')}}/images/widget/comment01.jpg alt=image></div>
-                                </div>
-                                <div class=commentinfo><p class=uppercaseheading>jhon doe</p>
+{{--                <li class=widget-comment><h4 class=footerheading>recent <span>comments</span></h4>--}}
+{{--                    <ul class=widget_commentDetails>--}}
+{{--                        <li><a href=# class=clearfix>--}}
+{{--                                <div class=comment-pic>--}}
+{{--                                    <div class=columnpic><img src={{asset('assets')}}/images/widget/comment01.jpg alt=image></div>--}}
+{{--                                </div>--}}
+{{--                                <div class=commentinfo><p class=uppercaseheading>jhon doe</p>--}}
 
-                                    <p>18 April ,<span class=red>2015</span></p>
+{{--                                    <p>18 April ,<span class=red>2015</span></p>--}}
 
-                                    <p>nice and cool</p></div>
-                            </a></li>
-                        <li><a href=# class=clearfix>
-                                <div class=comment-pic>
-                                    <div class=columnpic><img src={{asset('assets')}}/images/widget/comment02.jpg alt=image></div>
-                                </div>
-                                <div class=commentinfo><p class=uppercaseheading>jhon doe</p>
+{{--                                    <p>nice and cool</p></div>--}}
+{{--                            </a></li>--}}
+{{--                        <li><a href=# class=clearfix>--}}
+{{--                                <div class=comment-pic>--}}
+{{--                                    <div class=columnpic><img src={{asset('assets')}}/images/widget/comment02.jpg alt=image></div>--}}
+{{--                                </div>--}}
+{{--                                <div class=commentinfo><p class=uppercaseheading>jhon doe</p>--}}
 
-                                    <p>18 April ,<span class=red>2015</span></p>
+{{--                                    <p>18 April ,<span class=red>2015</span></p>--}}
 
-                                    <p>nice and cool</p></div>
-                            </a></li>
-                        <li><a href=# class=clearfix>
-                                <div class=comment-pic>
-                                    <div class=columnpic><img src={{asset('assets')}}/images/widget/comment03.jpg alt=image></div>
-                                </div>
-                                <div class=commentinfo><p class=uppercaseheading>jhon doe</p>
+{{--                                    <p>nice and cool</p></div>--}}
+{{--                            </a></li>--}}
+{{--                        <li><a href=# class=clearfix>--}}
+{{--                                <div class=comment-pic>--}}
+{{--                                    <div class=columnpic><img src={{asset('assets')}}/images/widget/comment03.jpg alt=image></div>--}}
+{{--                                </div>--}}
+{{--                                <div class=commentinfo><p class=uppercaseheading>jhon doe</p>--}}
 
-                                    <p>18 April ,<span class=red>2015</span></p>
+{{--                                    <p>18 April ,<span class=red>2015</span></p>--}}
 
-                                    <p>nice and cool</p></div>
-                            </a></li>
+{{--                                    <p>nice and cool</p></div>--}}
+{{--                            </a></li>--}}
+{{--                    </ul>--}}
+{{--                </li>--}}
+{{--            </ul>--}}
+
+                <li class=widget-comment>
+                    <h4 class=footerheading>recent <span>comments</span></h4>
+                    <ul class="widget_commentDetails">
+                        @php
+                            $comments = \App\Models\Contact::where('is_public', true)
+                                        ->orderBy('created_at', 'desc')
+                                        ->take(3) // عرض آخر 3 تعليقات فقط
+                                        ->get();
+                        @endphp
+
+                        @foreach ($comments as $comment)
+                            <li>
+                                <a href="#" class="clearfix">
+                                    <div class="comment-pic">
+                                        <div class="columnpic">
+                                            <img src="{{ asset('assets/images/widget/default-avatar.jpg') }}" alt="image">
+                                        </div>
+                                    </div>
+                                    <div class="commentinfo">
+                                        <p class="uppercaseheading">{{ $comment->name }}</p>
+                                        <p>{{ $comment->created_at->format('d F, Y') }}, <span class="red">{{ $comment->created_at->year }}</span></p>
+                                        <p>{{ \Illuminate\Support\Str::limit($comment->message, 100) }}</p>
+                                    </div>
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </li>
-            </ul>
+
         </div>
     </div>
     <div class=footer-type02>
