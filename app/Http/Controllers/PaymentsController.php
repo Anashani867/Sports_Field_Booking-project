@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Booking;
+use App\Models\Field;
 use App\Events\BookingCreated;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
@@ -87,23 +88,37 @@ class PaymentsController extends Controller
 
     public function bookAndPay(Request $request)
     {
-        // التحقق من صحة البيانات المدخلة
+        // Validate the other request data
         $validatedData = $request->validate([
             'field_id' => 'required|exists:fields,id',
             'booking_date' => 'required|date',
             'start_date_time' => 'required|date_format:H:i',
-            'end_date_time' => 'required|date_format:H:i|after:start_time',
+            'end_date_time' => 'required|date_format:H:i|after:start_date_time',
             'payment_method' => 'required|string|in:credit_card,paypal',
-            'amount' => 'required|numeric',
-        ]);
+            'amount' => 'required|numeric|min:0'        ]);
 
+
+        // Format the start and end date-time
         $startDateTime = $request->input('booking_date') . ' ' . $request->input('start_date_time');
         $endDateTime = $request->input('booking_date') . ' ' . $request->input('end_date_time');
 
+        // Check if the field exists and get the latitude and longitude
+        $field = Field::findOrFail($request->input('field_id'));
+        $latitude = $field->latitude;
+        $longitude = $field->longitude;
+
+        // Check for overlapping bookings: Start or End Time Intersecting with Existing Booking
         $existingBooking = Booking::where('field_id', $request->input('field_id'))
             ->where(function($query) use ($startDateTime, $endDateTime) {
+                // Case where the new start time is between an existing booking's start and end time
                 $query->whereBetween('start_date_time', [$startDateTime, $endDateTime])
-                    ->orWhereBetween('end_date_time', [$startDateTime, $endDateTime]);
+                    // Case where the new end time is between an existing booking's start and end time
+                    ->orWhereBetween('end_date_time', [$startDateTime, $endDateTime])
+                    // Case where the new time range fully contains an existing booking's time range
+                    ->orWhere(function($query2) use ($startDateTime, $endDateTime) {
+                        $query2->where('start_date_time', '<=', $startDateTime)
+                            ->where('end_date_time', '>=', $endDateTime);
+                    });
             })
             ->exists();
 
@@ -111,7 +126,7 @@ class PaymentsController extends Controller
             return redirect()->back()->with('error', 'This time slot is already booked!');
         }
 
-        // إنشاء الحجز باستخدام create()
+        // Create the booking
         $booking = Booking::create([
             'field_id' => $request->input('field_id'),
             'user_id' => auth()->id(),
@@ -121,25 +136,19 @@ class PaymentsController extends Controller
             'amount' => $request->input('amount'),
             'payment_method' => $request->input('payment_method'),
             'payment_status' => 'pending',
-            'field_name' => $request->input('field_name'),
-            'name' => auth()->user()->name,
-            'latitude' => $request->input('latitude'),
-            'longitude' => $request->input('longitude'),
+            'latitude' => $latitude,  // Retrieved from the field
+            'longitude' => $longitude, // Retrieved from the field
         ]);
 
-
-
-
-
-        // تنفيذ عملية الدفع
+        // Process payment
         $paymentStatus = $this->processPayment($request->payment_method, $request->amount);
 
         if ($paymentStatus) {
-            // تحديث حالة الدفع في جدول الحجز
+            // Update booking payment status
             $booking->payment_status = 'paid';
             $booking->save();
 
-            // إضافة سجل الدفع في جدول payments
+            // Log payment
             Payment::create([
                 'booking_id' => $booking->id,
                 'user_id' => auth()->id(),
@@ -150,14 +159,10 @@ class PaymentsController extends Controller
             event(new BookingCreated($booking));
 
             return redirect()->route('bookTickets')->with('success', 'Booking successful and payment completed!');
-//            return redirect()->route('payment.process')->with('success', 'Booking successful and payment completed!');
-
         }
 
-        // في حال فشل الدفع
         return redirect()->back()->with('error', 'Payment failed, please try again!');
     }
-
 //public function processPayment(Request $request)
 //{
 //    $validatedData = $request->validate([

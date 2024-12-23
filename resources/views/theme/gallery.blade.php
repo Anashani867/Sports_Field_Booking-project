@@ -251,7 +251,6 @@
 {{--</style>--}}
 
 
-
 @extends('theme.master')
 
 @section('hero-title')
@@ -321,7 +320,10 @@
                                             <div class="content-01">
                                                 <h6>{{ $field->field_name }}</h6>
                                                 <p class="red_p">Stories of the legends</p>
-                                                <p class="describtion">
+                                                <p class="describtion"
+                                                   data-location="{{ $field->location }}"
+                                                   data-availability="{{ $field->availability }}"
+                                                   data-price="{{ $field->price }}">
                                                     <strong>Location:</strong> {{ $field->location }}<br>
                                                     <strong>Availability:</strong> {{ $field->availability }}<br>
                                                     <strong>Price per Hour:</strong> ${{ $field->price }}
@@ -474,27 +476,33 @@
 </style>
 
 <script>
-    document.getElementById('filterButton').addEventListener('click', function() {
-        const location = document.getElementById('locationFilter').value;
-        const availability = document.getElementById('availabilityFilter').value;
-        const minPrice = document.getElementById('minPrice').value;
-        const maxPrice = document.getElementById('maxPrice').value;
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('filterButton').addEventListener('click', function() {
+            const location = document.getElementById('locationFilter').value.trim().toLowerCase();
+            const availability = document.getElementById('availabilityFilter').value.trim().toLowerCase();
+            const minPrice = parseFloat(document.getElementById('minPrice').value.trim()) || 0;
+            const maxPrice = parseFloat(document.getElementById('maxPrice').value.trim()) || Infinity;
 
-        const fieldCards = document.querySelectorAll('.field-card');
-        fieldCards.forEach(card => {
-            const cardLocation = card.querySelector('.describtion').innerText.split('Location: ')[1].split('\n')[0].trim();
-            const cardAvailability = card.querySelector('.describtion').innerText.split('Availability: ')[1].split('\n')[0].trim();
-            const cardPrice = parseFloat(card.querySelector('.describtion').innerText.split('Price per Hour: $')[1].trim());
+            const fieldCards = document.querySelectorAll('.field-card');
+            fieldCards.forEach(card => {
+                const cardLocation = card.querySelector('.describtion').dataset.location.trim().toLowerCase();
+                const cardAvailability = card.querySelector('.describtion').dataset.availability.trim().toLowerCase();
+                const cardPrice = parseFloat(card.querySelector('.describtion').dataset.price);
 
-            if ((location && cardLocation !== location) ||
-                (availability && cardAvailability !== availability) ||
-                (minPrice && cardPrice < minPrice) ||
-                (maxPrice && cardPrice > maxPrice)) {
-                card.style.display = 'none';
-            } else {
-                card.style.display = 'block';
-            }
+                const isLocationMatch = !location || cardLocation.includes(location);
+                const isAvailabilityMatch = !availability || cardAvailability.includes(availability);
+                const isPriceMatch = (cardPrice >= minPrice) && (cardPrice <= maxPrice);
+
+                if (isLocationMatch && isAvailabilityMatch && isPriceMatch) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         });
     });
 
+
+
 </script>
+

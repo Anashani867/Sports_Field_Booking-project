@@ -5,6 +5,10 @@ use App\Models\Field;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Models\AvailableDate;
+use App\Models\Reservation;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+
 
 class FieldController extends Controller
 {
@@ -59,27 +63,58 @@ class FieldController extends Controller
 //
 //    }
 
+//
+//Field::create([
+//'field_name' => $data['field_name'],
+//'location' => $data['location'],
+//'start_time' => $data['start_time'],
+//'end_time' => $data['end_time'],
+//'price' => $data['price'],
+//'latitude' => $data['latitude'],
+//'longitude' => $data['longitude'],
+//'image' => $data['image'] ?? null,
+//]);
+
     public function store(Request $request)
     {
-        // التحقق من صحة البيانات
+        // Validate data
         $request->validate([
             'field_name' => 'required|string|max:255',
             'location' => 'required|string',
             'availability' => 'required|string',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+            'booking_start_date' => 'required|date',
+            'booking_end_date' => 'required|date|after_or_equal:booking_start_date',
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // معالجة البيانات
+        // Process the data
         $data = $request->all();
 
+        // Handle image upload if exists
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('fields/images', 'public'); // حفظ الصورة في التخزين العام
-            $data['image'] = $path; // تخزين المسار فقط في قاعدة البيانات
+            $path = $request->file('image')->store('fields/images', 'public');
+            $data['image'] = $path; // Store the path in the database
         }
 
-        Field::create($data);
+        // Store the field data in the database
+        Field::create([
+            'field_name' => $data['field_name'],
+            'location' => $data['location'],
+            'availability' => $data['availability'],
+            'start_time' => $data['start_time'],
+            'end_time' => $data['end_time'],
+            'start_date' => $data['booking_start_date'], // إضافة start_date
+            'end_date' => $data['booking_end_date'],
+            'price' => $data['price'],
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
+            'image' => $data['image'] ?? null,
+        ]);
 
+        // Redirect with success message
         return redirect()->back()->with('success', 'Field added successfully!');
     }
 
@@ -173,39 +208,355 @@ class FieldController extends Controller
 //    }
 
 
-    public function showFieldDetails(Request $request, $fieldId)
+//    public function showFieldDetails(Request $request, $fieldId)
+//    {
+//        // Retrieve field details
+//        $field = Field::findOrFail($fieldId);
+//
+//        // Add the new availability date if sent from the form
+//        if ($request->has(['start_date_time', 'end_date_time'])) {
+//            $request->validate([
+//                'field_name' => 'required|string|max:255',
+//                'latitude' => 'required|numeric',
+//                'longitude' => 'required|numeric',
+//                'start_date_time' => 'required|date',
+//                'end_date_time' => 'required|date|after_or_equal:start_date_time',
+//            ]);
+//
+//            AvailableDate::create([
+//                'field_id' => $fieldId,
+//                'start_date_time' => $request->input('start_date_time'),
+//                'end_date_time' => $request->input('end_date_time'),
+//            ]);
+//
+//        }
+//
+//        // Retrieve booked dates for the given field
+//        $bookedDates = Booking::where('field_id', $fieldId)->pluck('created_at')->toArray();
+//
+//        // Retrieve available dates excluding booked ones
+//        $dates = AvailableDate::whereNotIn('created_at', $bookedDates)
+//            ->where('field_id', $fieldId)
+//            ->get();
+//
+//        return view('theme.FieldDetails', compact('field', 'dates'));
+//    }
+
+//    public function showFieldDetails($fieldId)
+//    {
+//        // Retrieve field details
+//        $field = Field::findOrFail($fieldId);
+//
+//        // Ensure the field has the necessary attributes (latitude, longitude)
+//        if (!$field->latitude || !$field->longitude) {
+//            // Handle the case where the latitude or longitude is missing, maybe with a default or error message
+//            return redirect()->back()->with('error', 'Field location details are missing.');
+//        }
+//
+//        // Generate available time slots based on the field's start_time and end_time
+//        $startTime = $field->start_time; // Example: '11:11:00'
+//        $endTime = $field->end_time;     // Example: '14:22:00'
+//
+//        $availableTimes = [];
+//        $current = strtotime($startTime);
+//        $end = strtotime($endTime);
+//
+//        // Generate available times based on the start and end times, incremented by 30 minutes
+//        while ($current < $end) {
+//            $availableTimes[] = date('H:i', $current);
+//            $current = strtotime('+30 minutes', $current); // Adjust interval if needed
+//        }
+//
+//        // Return the view with the field details and available times
+//        return view('theme.FieldDetails', compact('field', 'availableTimes'));
+//    }
+
+//    public function showFieldDetails($fieldId, Request $request)
+//    {
+//        // استرداد تفاصيل الحقل بناءً على المعرف
+//        $field = Field::find($fieldId);
+//
+//        // إذا لم يتم العثور على الحقل، إرجاع رسالة خطأ
+//        if (!$field) {
+//            return redirect()->back()->with('error', 'Field not found.');
+//        }
+//
+//        // استرداد التاريخ الذي اختاره المستخدم من الطلب (إن وجد)
+//        $selectedDate = $request->input('booking_date');
+//
+//        // التحقق من وجود تاريخ محدد، إذا لم يكن موجودًا نضعه فارغًا
+//        if (!$selectedDate) {
+//            $selectedDate = null;
+//        }
+//
+//        // استرداد التواريخ المتاحة
+//        $today = date('Y-m-d');
+//        $endDate = date('Y-m-d', strtotime('+7 days'));
+//        $availableDates = [];
+//        $currentDate = strtotime($today);
+//
+//        while ($currentDate <= strtotime($endDate)) {
+//            $availableDates[] = date('Y-m-d', $currentDate);
+//            $currentDate = strtotime('+1 day', $currentDate);
+//        }
+//
+//        // استرداد الحجوزات المحجوزة بناءً على start_date_time و end_date_time
+//        $reservedBookings = Booking::where('field_id', $fieldId)
+//            ->where(function ($query) use ($today, $endDate) {
+//                // البحث عن الحجوزات التي تتداخل مع الفترة الزمنية
+//                $query->whereBetween('start_date_time', [$today, $endDate])
+//                    ->orWhereBetween('end_date_time', [$today, $endDate])
+//                    ->orWhere(function ($query) use ($today, $endDate) {
+//                        // البحث عن الحجوزات التي تبدأ قبل الفترة المحددة وتنتهي بعدها
+//                        $query->where('start_date_time', '<', $today)
+//                            ->where('end_date_time', '>', $endDate);
+//                    });
+//            })
+//            ->select('start_date_time', 'end_date_time')
+//            ->get();
+//
+//        // استخراج التواريخ المحجوزة من start_date_time و end_date_time
+//        $reservedDates = [];
+//        foreach ($reservedBookings as $booking) {
+//            $startDate = strtotime(date('Y-m-d', strtotime($booking->start_date_time)));
+//            $endDate = strtotime(date('Y-m-d', strtotime($booking->end_date_time)));
+//
+//            // تأكد من أن الحقول ليست NULL قبل إضافتها
+//            if ($startDate && $endDate) {
+//                while ($startDate <= $endDate) {
+//                    $reservedDates[] = date('Y-m-d', $startDate);
+//                    $startDate = strtotime('+1 day', $startDate);
+//                }
+//            }
+//        }
+//
+//        // تحويل المصفوفة إلى مجموعة فريدة من التواريخ المحجوزة
+//        $reservedDates = array_unique($reservedDates);
+//
+//        // تصفية الأيام المتاحة بإزالة الأيام المحجوزة
+//        $availableDates = array_diff($availableDates, $reservedDates);
+//
+//        // توليد قائمة الأوقات المتاحة بناءً على start_time و end_time من الحقل
+//        $startTime = $field->start_time; // وقت البداية
+//        $endTime = $field->end_time;     // وقت النهاية
+//
+//        $availableTimes = [];
+//        $current = strtotime($startTime);
+//        $end = strtotime($endTime);
+//
+//        while ($current < $end) {
+//            $availableTimes[] = date('H:i', $current);
+//            $current = strtotime('+60 minutes', $current); // تكرار بمدة ساعة
+//        }
+//
+//        // استرداد الأوقات المحجوزة بناءً على start_date_time و end_date_time
+//        $reservedTimes = [];
+//        foreach ($reservedBookings as $booking) {
+//            $currentReserved = strtotime($booking->start_date_time);
+//            $endReserved = strtotime($booking->end_date_time);
+//
+//            while ($currentReserved < $endReserved) {
+//                $reservedTimes[] = date('H:i', $currentReserved);
+//                $currentReserved = strtotime('+60 minutes', $currentReserved);
+//            }
+//        }
+//
+//        // تصفية الأوقات المتاحة بإزالة الأوقات المحجوزة
+//        $availableTimes = array_diff($availableTimes, $reservedTimes);
+//
+//        // إرجاع العرض مع البيانات
+//        return view('theme.FieldDetails', compact('field', 'availableDates', 'availableTimes', 'reservedTimes', 'selectedDate'));
+//    }
+//    public function showFieldDetails($fieldId, Request $request)
+//    {
+//        // استرداد تفاصيل الحقل بناءً على المعرف
+//        $field = Field::find($fieldId);
+//
+//        // إذا لم يتم العثور على الحقل، إرجاع رسالة خطأ
+//        if (!$field) {
+//            return redirect()->back()->with('error', 'Field not found.');
+//        }
+//
+//        // استرداد التاريخ الذي اختاره المستخدم من الطلب (إن وجد)
+//        $selectedDate = $request->input('booking_date') ?: null;
+//        $today = date('Y-m-d');
+//
+//        // تحديد تاريخ النهاية بناءً على تاريخ البداية والنهاية المحدد في الحقل
+//        $endDate = $field->end_date; // استخدام تاريخ النهاية المحدد في الحقل مباشرة
+//
+//        // استرداد الحجوزات المحجوزة بناءً على start_date_time و end_date_time
+//        $reservedBookings = Booking::where('field_id', $fieldId)
+//            ->whereBetween('start_date_time', [$today, $today])
+//            ->orWhereBetween('end_date_time', [$today, $today])
+//            ->orWhere(function ($query) use ($today) {
+//                $query->where('start_date_time', '<', $today)
+//                    ->where('end_date_time', '>', $today);
+//            })
+//            ->select('start_date_time', 'end_date_time')
+//            ->get();
+//
+//        // استخراج التواريخ المحجوزة
+//        $reservedDates = $reservedBookings->flatMap(function ($booking) {
+//            $startDate = strtotime(date('Y-m-d', strtotime($booking->start_date_time)));
+//            $endDate = strtotime(date('Y-m-d', strtotime($booking->end_date_time)));
+//
+//            $dates = [];
+//            while ($startDate <= $endDate) {
+//                $dates[] = date('Y-m-d', $startDate);
+//                $startDate = strtotime('+1 day', $startDate);
+//            }
+//            return $dates;
+//        })->unique();
+//
+//        // تحديد تاريخ النهاية بناءً على اليوم الأخير الموجود في البيانات
+//        $availableDates = collect(range(0, (strtotime($endDate) - strtotime($today)) / 86400))
+//            ->map(fn($days) => date('Y-m-d', strtotime("+$days days", strtotime($today))))
+//            ->diff($reservedDates)
+//            ->values();
+//
+//        // توليد الأوقات المتاحة بناءً على start_time و end_time من الحقل
+//        $availableTimesByDay = $availableDates->mapWithKeys(function ($date) use ($field) {
+//            $availableTimes = [];
+//            $current = strtotime($field->start_time);
+//            $end = strtotime($field->end_time);
+//
+//            while ($current < $end) {
+//                $availableTimes[] = date('H:i', $current);
+//                $current = strtotime('+60 minutes', $current);
+//            }
+//
+//            return [$date => $availableTimes];
+//        });
+//
+//        // استرداد الأوقات المحجوزة لكل يوم
+//        $reservedTimesByDay = $reservedBookings->flatMap(function ($booking) {
+//            $currentReserved = strtotime($booking->start_date_time);
+//            $endReserved = strtotime($booking->end_date_time);
+//
+//            $times = [];
+//            while ($currentReserved < $endReserved) {
+//                $times[] = date('H:i', $currentReserved);
+//                $currentReserved = strtotime('+60 minutes', $currentReserved);
+//            }
+//            return $times;
+//        });
+//
+//        // تصفية الأوقات المتاحة لكل يوم بإزالة الأوقات المحجوزة
+//        foreach ($availableTimesByDay as $date => $availableTimes) {
+//            $availableTimesByDay[$date] = array_diff($availableTimes, $reservedTimesByDay[$date] ?? []);
+//        }
+//
+//        // إذا لم تكن هناك تواريخ متاحة، نعرض رسالة للمستخدم
+//        if ($availableDates->isEmpty()) {
+//            return redirect()->back()->with('error', 'No available dates for this field.');
+//        }
+//
+//        // إرجاع العرض مع البيانات
+//        return view('theme.FieldDetails', compact('field', 'availableDates', 'availableTimesByDay', 'reservedTimesByDay', 'selectedDate'));
+//    }
+
+
+    public function showFieldDetails($fieldId, Request $request)
     {
-        // Retrieve field details
-        $field = Field::findOrFail($fieldId);
+        // استرداد تفاصيل الحقل بناءً على المعرف
+        $field = Field::find($fieldId);
 
-        // Add the new availability date if sent from the form
-        if ($request->has(['start_date_time', 'end_date_time'])) {
-            $request->validate([
-                'field_name' => 'required|string|max:255',
-                'latitude' => 'required|numeric',
-                'longitude' => 'required|numeric',
-                'start_date_time' => 'required|date',
-                'end_date_time' => 'required|date|after_or_equal:start_date_time',
-            ]);
-
-            AvailableDate::create([
-                'field_id' => $fieldId,
-                'start_date_time' => $request->input('start_date_time'),
-                'end_date_time' => $request->input('end_date_time'),
-            ]);
-
+        // إذا لم يتم العثور على الحقل، إرجاع رسالة خطأ
+        if (!$field) {
+            return redirect()->back()->with('error', 'Field not found.');
         }
 
-        // Retrieve booked dates for the given field
-        $bookedDates = Booking::where('field_id', $fieldId)->pluck('created_at')->toArray();
+        // استرداد التاريخ الذي اختاره المستخدم من الطلب (إن وجد)
+        $selectedDate = $request->input('booking_date') ?: null;
+        $today = date('Y-m-d');
 
-        // Retrieve available dates excluding booked ones
-        $dates = AvailableDate::whereNotIn('created_at', $bookedDates)
-            ->where('field_id', $fieldId)
+        // تحديد تاريخ النهاية بناءً على تاريخ النهاية المحدد في الحقل مباشرة
+        $endDate = $field->end_date;
+
+        // استرداد الحجوزات المحجوزة بناءً على start_date_time و end_date_time
+        $reservedBookings = Booking::where('field_id', $fieldId)
+            ->where(function ($query) use ($today) {
+                $query->whereBetween('start_date_time', [$today . ' 00:00:00', $today . ' 23:59:59'])
+                    ->orWhereBetween('end_date_time', [$today . ' 00:00:00', $today . ' 23:59:59'])
+                    ->orWhere(function ($q) use ($today) {
+                        $q->where('start_date_time', '<', $today)
+                            ->where('end_date_time', '>', $today);
+                    });
+            })
+            ->select('start_date_time', 'end_date_time')
             ->get();
 
-        return view('theme.FieldDetails', compact('field', 'dates'));
+        // تعريف $reservedTimesByDay بعد استرداد $reservedBookings
+        $reservedTimesByDay = $reservedBookings->groupBy(function ($booking) {
+            return date('Y-m-d', strtotime($booking->start_date_time));
+        })->map(function ($bookings) {
+            $times = [];
+            foreach ($bookings as $booking) {
+                $currentReserved = strtotime($booking->start_date_time);
+                $endReserved = strtotime($booking->end_date_time);
+
+                while ($currentReserved < $endReserved) {
+                    $times[] = date('H:i', $currentReserved);
+                    $currentReserved = strtotime('+60 minutes', $currentReserved);
+                }
+            }
+            return $times;
+        });
+
+        // استخراج التواريخ المحجوزة
+        $reservedDates = $reservedBookings->flatMap(function ($booking) {
+            $startDate = strtotime(date('Y-m-d', strtotime($booking->start_date_time)));
+            $endDate = strtotime(date('Y-m-d', strtotime($booking->end_date_time)));
+
+            $dates = [];
+            while ($startDate <= $endDate) {
+                $dates[] = date('Y-m-d', $startDate);
+                $startDate = strtotime('+1 day', $startDate);
+            }
+            return $dates;
+        })->unique();
+
+        // تحديد التواريخ المتوفرة بناءً على التواريخ المحجوزة
+        $availableDates = collect(range(0, (strtotime($endDate) - strtotime($today)) / 86400))
+            ->map(fn($days) => date('Y-m-d', strtotime("+$days days", strtotime($today))))
+            ->diff($reservedDates)
+            ->values();
+
+        // توليد الأوقات المتاحة بناءً على start_time و end_time من الحقل
+        $availableTimesByDay = $availableDates->mapWithKeys(function ($date) use ($field, $reservedTimesByDay) {
+            $availableTimes = [];
+            $current = strtotime($field->start_time);
+            $end = strtotime($field->end_time);
+
+            // إنشاء قائمة الأوقات المتاحة
+            while ($current < $end) {
+                $availableTimes[] = date('H:i', $current);
+                $current = strtotime('+60 minutes', $current);
+            }
+
+            // تصفية الأوقات المتاحة بإزالة الأوقات المحجوزة
+            $reservedTimes = $reservedTimesByDay[$date] ?? [];
+            $availableTimes = array_diff($availableTimes, $reservedTimes);
+
+            // إذا لم تكن هناك أوقات متاحة، يتم إرجاع null لإزالة هذا اليوم
+            if (empty($availableTimes)) {
+                return null;
+            }
+
+            return [$date => $availableTimes];
+        })->filter(); // تصفية القيم الفارغة (أي الأيام التي تم حجزها بالكامل).
+
+        // إذا لم تكن هناك تواريخ متاحة، نعرض رسالة للمستخدم
+        if ($availableDates->isEmpty()) {
+            return redirect()->back()->with('error', 'No available dates for this field.');
+        }
+
+        // إرجاع العرض مع البيانات
+        return view('theme.FieldDetails', compact('field', 'availableDates', 'availableTimesByDay', 'selectedDate', 'reservedTimesByDay'));
     }
+
+
+
 
     public function saveLocation(Request $request , $fieldId)
     {

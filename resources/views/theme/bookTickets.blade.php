@@ -298,7 +298,7 @@
                                             </div>
                                             <div class="ticketInner_info paragraph02 clearfix">
                                                 <!-- عرض التاريخ -->
-                                                <span>{{ \Carbon\Carbon::parse($booking->date_time)->toFormattedDateString() }}</span>
+                                                <span>{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</span>
                                                 <!-- عرض وقت البداية والنهاية -->
 
 

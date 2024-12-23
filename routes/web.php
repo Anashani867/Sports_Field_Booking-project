@@ -224,6 +224,8 @@ use App\Http\Controllers\FieldDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\ReservationController;
+
 
 
 /*
@@ -321,6 +323,9 @@ Route::controller(ThemeController::class)->name('theme.')->group(function () {
     Route::get('/contact', 'contact')->name('contact');
     Route::post('/contact/store', 'store')->name('contact.store');
 });
+Route::post('/check-availability', [ReservationController::class, 'checkAvailability']);
+
+
 
 Route::prefix('user_fields')->name('user_fields.')->group(function () {
     Route::middleware('guest:user_fields')->group(function () {
