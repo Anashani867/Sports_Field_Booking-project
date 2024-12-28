@@ -326,7 +326,7 @@ Route::middleware('guest')->group(function () {
 Route::controller(ThemeController::class)->name('theme.')->group(function () {
     Route::get('/about', 'about')->name('about');
     Route::get('/gallery', 'gallery')->name('gallery');
-    Route::get('/blog', 'blog')->name('blog');
+//    Route::get('/blog', 'blog')->name('blog');
     Route::get('/shop', 'shop')->name('shop');
     Route::get('/contact', 'contact')->name('contact');
     Route::post('/contact/store', 'store')->name('contact.store');

@@ -40,15 +40,19 @@
                             </a></li>
                     </ul>
                 </li>
-                <li class=widget-product><h4 class=footerheading>real <span>soccer products</span></h4>
-                    <ul class=widget_productdetails>
-                        <li><a href=#>shoes(4)</a></li>
-                        <li><a href=#>men(4)</a></li>
-                        <li><a href=#>t-shirt(4)</a></li>
-                        <li><a href=#>sports(4)</a></li>
-                        <li><a href="#">glass</a></li>
-                    </ul>
-                </li>
+
+{{--                <li class=widget-product><h4 class=footerheading>real <span>soccer products</span></h4>--}}
+{{--                    <ul class=widget_productdetails>--}}
+{{--                        <li><a href=#>shoes(4)</a></li>--}}
+{{--                        <li><a href=#>men(4)</a></li>--}}
+{{--                        <li><a href=#>t-shirt(4)</a></li>--}}
+{{--                        <li><a href=#>sports(4)</a></li>--}}
+{{--                        <li><a href="#">glass</a></li>--}}
+{{--                    </ul>--}}
+{{--                </li>--}}
+
+
+
 {{--                <li class=widget-comment><h4 class=footerheading>recent <span>comments</span></h4>--}}
 {{--                    <ul class=widget_commentDetails>--}}
 {{--                        <li><a href=# class=clearfix>--}}
@@ -100,7 +104,7 @@
                                 <a href="#" class="clearfix">
                                     <div class="comment-pic">
                                         <div class="columnpic">
-                                            <img src="{{ asset('assets/images/widget/default-avatar.jpg') }}" alt="image">
+                                            <img src="{{ asset('assets/images/default-profile.png') }}" alt="image">
                                         </div>
                                     </div>
                                     <div class="commentinfo">
@@ -114,7 +118,8 @@
                     </ul>
                 </li>
 
-        </div>
+            </ul>
+    </div>
     </div>
     <div class=footer-type02>
         <div class=container>

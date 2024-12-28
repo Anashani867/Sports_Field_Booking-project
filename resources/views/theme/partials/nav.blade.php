@@ -1,3 +1,17 @@
+<style>
+    #profile-options {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 10px;
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000; /* تأكد من أن القائمة تظهر فوق العناصر الأخرى */
+    }
+
+</style>
 <header class=header-main>
 
     <div class=header-upper>
@@ -29,13 +43,33 @@
                 <nav>
                     <ul>
                         @if(Auth::check())
-                            <li>Welcome, {{ auth()->user()->name }}</li>
-                            <li><a href="{{ route('profile.edit') }}">Edit Profile</a></li>
-                            <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                            <li style="color:whitesmoke; display: flex; align-items: center; cursor: pointer;" id="profile-menu">
+                                <img
+                                    src="{{ auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : asset('assets/images/default-profile.png') }}"
+                                    alt="Profile Image"
+                                    class="rounded-circle border img-thumbnail"
+                                    style="height: 40px; width: 40px; margin-right: 10px;"
+                                    id="profile-img"
+                                />
+
+                                Welcome, {{ auth()->user()->name }}
+                            </li>
+
+                            <!-- القائمة التي ستظهر عند النقر على الصورة -->
+                            <ul id="profile-options" style="display: none;">
+                                <li><a href="{{ route('profile.edit') }}" style="color: black;">Edit Profile</a></li>
+                                <li>
+                                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="color: black;">
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
                         @else
+                            <li><a href="{{ route('user_fields.login') }}" class="btn btn-link">Log in user_fields</a></li>
                             <li><a href="{{ route('login') }}" class="btn btn-link">Log in</a></li>
                             <li><a href="{{ route('register') }}" class="btn btn-link">Register</a></li>
                         @endif
@@ -45,11 +79,10 @@
 
 
 
-
                 {{--                    <li><a href="#">Signup/login</a></li>--}}
 {{--                    <li><a href=shopcart.html><i class="fa fa-shopping-cart"></i> <span>cart(<span--}}
 {{--                                    class=cartitems>0</span>)</span></a></li>--}}
-                </ul>
+{{--                </ul>--}}
             </div>
         </div>
     </div>
@@ -108,4 +141,26 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // عندما يتم النقر على صورة الملف الشخصي
+            document.getElementById('profile-img').addEventListener('click', function() {
+                var options = document.getElementById('profile-options');
+                options.style.display = options.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // إغلاق القائمة عند النقر في أي مكان آخر على الصفحة
+            window.addEventListener('click', function(e) {
+                var options = document.getElementById('profile-options');
+                var profileMenu = document.getElementById('profile-menu');
+                // إغلاق القائمة إذا كان النقر خارج الصورة أو القائمة
+                if (!profileMenu.contains(e.target)) {
+                    options.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </header>
+

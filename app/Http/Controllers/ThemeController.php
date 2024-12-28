@@ -28,11 +28,13 @@ class ThemeController extends Controller
     return view('theme.gallery', compact('fields', 'uniqueLocations'));
 //        return view('theme.gallery');
 
-}  public function blog()
-{
-    return view('theme.blog');
-
 }
+
+//  public function blog()
+//{
+//    return view('theme.blog');
+//
+//}
     public function bookTickets(Request $request)
     {
         $bookings = Booking::all();

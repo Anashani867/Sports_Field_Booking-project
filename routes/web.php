@@ -225,6 +225,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\MediaController;
+use Illuminate\Support\Facades\Auth;
+
 
 
 
@@ -318,7 +321,7 @@ Route::middleware(['auth'])->group(function () {
 Route::controller(ThemeController::class)->name('theme.')->group(function () {
     Route::get('/about', 'about')->name('about');
     Route::get('/gallery', 'gallery')->name('gallery');
-    Route::get('/blog', 'blog')->name('blog');
+//    Route::get('/blog', 'blog')->name('blog');
     Route::get('/shop', 'shop')->name('shop');
     Route::get('/contact', 'contact')->name('contact');
     Route::post('/contact/store', 'store')->name('contact.store');
@@ -342,6 +345,16 @@ Route::prefix('user_fields')->name('user_fields.')->group(function () {
 
 
 });
+
+Route::middleware(['auth'])->group(function () {
+    // لتحميل الوسائط
+
+    Route::post('/media/upload', [MediaController::class, 'upload'])->name('media.upload');
+
+    // لعرض الوسائط
+});
+Route::get('/blog', [MediaController::class, 'index'])->name('theme.blog');
+
 
 Auth::routes(['verify' => true]);
 
@@ -369,6 +382,12 @@ Route::post('/book-and-pay', [PaymentsController::class, 'bookAndPay'])->name('b
 Route::get('/payment', [PaymentsController::class, 'showPaymentForm'])->name('payment.form');
 //Route::post('/payment/process', [PaymentsController::class, 'processPayment'])->name('payment.process');
 
-
+//Route::middleware(['auth'])->group(function () {
+//    // لتحميل الوسائط
+//    Route::post('/upload/media', [MediaController::class, 'store'])->name('upload.media');
+//
+//    // لعرض الوسائط
+//    Route::get('/blog', [MediaController::class, 'index'])->name('theme.blog');
+//});
 require __DIR__ . '/auth.php';
 
