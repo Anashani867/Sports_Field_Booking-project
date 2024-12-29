@@ -156,6 +156,13 @@
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
         </div>
+
+        <div class="text-center">
+            <p>Don't have an account?
+                <a href="{{ route('user_fields.register') }}" class="custom-link">Register Now</a>
+            </p>
+        </div>
+
         <button type="submit">Sign In</button>
     </form>
 </div>

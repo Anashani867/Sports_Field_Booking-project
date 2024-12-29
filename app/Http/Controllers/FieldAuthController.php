@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-//use App\Models\UserField;
+use App\Models\UserField;
 //use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +18,12 @@ class FieldAuthController extends Controller
     {
         return view('field.auth.login');
     }
+
+    public function showRegisterForm()
+    {
+        return view('field.auth.register');
+    }
+
 
 //    public function login(Request $request)
 //    {
@@ -68,6 +74,29 @@ class FieldAuthController extends Controller
 //
 //  }
 
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:user_fields,email',
+            'password' => 'required|min:6|confirmed',
+            'phone' => 'required|numeric|digits_between:10,15', // تحقق من رقم الهاتف
+            'gender' => 'required|in:male,female,other', // تحقق من الجنس
+        ]);
+
+        $user = UserField::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'phone' => $request->phone,  // حفظ رقم الهاتف
+            'gender' => $request->gender,
+        ]);
+
+        // تسجيل الدخول مباشرة بعد التسجيل
+        auth()->guard('user_fields')->login($user);
+
+        return redirect()->route('user_fields.dashboard')->with('success', 'Registration successful.');
+    }
 
     // تسجيل الخروج
     public function logout()

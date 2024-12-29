@@ -70,8 +70,9 @@
                             </form>
                         @else
                             <li><a href="{{ route('user_fields.login') }}" class="btn btn-link">Log in user_fields</a></li>
-                            <li><a href="{{ route('login') }}" class="btn btn-link">Log in</a></li>
-                            <li><a href="{{ route('register') }}" class="btn btn-link">Register</a></li>
+                            <li><a href="{{ route('user_fields.register') }}" class="btn btn-link">register user_fields</a></li>
+                            <li><a href="{{ route('login') }}" class="btn btn-link">Log in-user</a></li>
+                            <li><a href="{{ route('register') }}" class="btn btn-link">Register-user</a></li>
                         @endif
                     </ul>
                 </nav>

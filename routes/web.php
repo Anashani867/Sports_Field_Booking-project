@@ -331,19 +331,23 @@ Route::post('/check-availability', [ReservationController::class, 'checkAvailabi
 
 
 Route::prefix('user_fields')->name('user_fields.')->group(function () {
+    // Routes for guest users
     Route::middleware('guest:user_fields')->group(function () {
         Route::get('login', [FieldAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [FieldAuthController::class, 'login']);
+
+        // Add the Register route
+        Route::get('register', [FieldAuthController::class, 'showRegisterForm'])->name('register');
+        Route::post('register', [FieldAuthController::class, 'register']);
     });
 
+    // Routes for authenticated users
     Route::middleware('auth:user_fields')->group(function () {
         Route::get('dashboard', [FieldDashboardController::class, 'index'])->name('dashboard');
         Route::post('/field/store', [FieldController::class, 'store'])->name('field.store');
 
         Route::get('logout', [FieldAuthController::class, 'logout'])->name('logout');
     });
-
-
 });
 
 Route::middleware(['auth'])->group(function () {

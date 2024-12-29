@@ -20,6 +20,8 @@ class UserField extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'gender',
     ];
 
     // إخفاء الحقول عند الإرجاع (مثل كلمة المرور)
