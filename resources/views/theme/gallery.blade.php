@@ -266,6 +266,13 @@
             <div class="container">
                 <h2 class="table-title">Field Booking Cards</h2>
 
+                <div class="LatestNews_wrap clearfix">
+                    <ul class="nav accordion-news" role="tablist">
+                        <li class="active">
+                            <a href="#club_news" aria-controls="club_news" role="tab" data-toggle="tab">Available Fields</a>
+                        </li>
+                    </ul>
+
                 <!-- Filters Section -->
                 <div class="filters">
                     <h4>Filters</h4>
@@ -301,12 +308,7 @@
                     </form>
                 </div>
 
-                <div class="LatestNews_wrap clearfix">
-                    <ul class="nav accordion-news" role="tablist">
-                        <li class="active">
-                            <a href="#club_news" aria-controls="club_news" role="tab" data-toggle="tab">Available Fields</a>
-                        </li>
-                    </ul>
+
 
                     <div class="tab-content news_display_container clearfix">
                         <ul id="club_news" class="tab-pane active row">
@@ -318,15 +320,15 @@
                                                 <img src="{{ asset('storage/' . $field->image) }}" alt="{{ $field->field_name }}" class="card-image">
                                             </div>
                                             <div class="content-01">
-                                                <h6>{{ $field->field_name }}</h6>
+                                                <h6 style="color: whitesmoke">{{ $field->field_name }}</h6>
                                                 <p class="red_p">Stories of the legends</p>
-                                                <p class="describtion"
+                                                <p style="color: whitesmoke" class="describtion"
                                                    data-location="{{ $field->location }}"
                                                    data-availability="{{ $field->availability }}"
                                                    data-price="{{ $field->price }}">
-                                                    <strong>Location:</strong> {{ $field->location }}<br>
-                                                    <strong>Availability:</strong> {{ $field->availability }}<br>
-                                                    <strong>Price per Hour:</strong> ${{ $field->price }}
+                                                    <strong style="color: whitesmoke">Location:</strong> {{ $field->location }}<br>
+                                                    <strong style="color: whitesmoke">Availability:</strong> {{ $field->availability }}<br>
+                                                    <strong style="color: whitesmoke">Price per Hour:</strong> ${{ $field->price }}
                                                 </p>
                                             </div>
                                             <div class="news_date clearfix">
@@ -348,25 +350,131 @@
 
 <style>
     .filters {
-        padding: 20px;
-        background-color: #f9f9f9;
-        margin-bottom: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 0;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+        border: 1px solid #e63946;
+        max-width: 100%;
     }
 
     .filters h4 {
-        font-size: 1.8rem;
+        color: #e63946;
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: uppercase;
         margin-bottom: 15px;
+        position: relative;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #e63946;
+    }
+
+    .filters form {
+        display: flex;
+        align-items: flex-end;
+        gap: 15px;
+        flex-wrap: wrap;
     }
 
     .filters .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 0;
+        flex: 1;
+        min-width: 180px;
     }
 
-    .filters .btn {
+    .filters .form-group:last-child {
+        flex: 0 0 auto;
+    }
+
+    .filters label {
+        color: #333;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 12px;
+        margin-bottom: 4px;
         display: block;
+    }
+
+    .filters .form-control {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0;
+        height: 35px;
+        padding: 5px 10px;
+        color: #495057;
+        font-size: 13px;
         width: 100%;
+    }
+
+    .filters select.form-control {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23e63946' d='M6 9L0 0h12z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 30px;
+    }
+
+    /* Price range inputs */
+    .filters .d-flex {
+        display: flex;
+        gap: 8px;
+        flex: 1;
+    }
+
+    .filters .d-flex .form-control {
+        width: calc(50% - 4px);
+    }
+
+    .filters .btn-primary {
+        background-color: #e63946;
+        border: none;
+        color: white;
+        padding: 8px 20px;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        border-radius: 0;
+        transition: all 0.3s ease;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+    }
+
+    .filters .btn-primary:hover {
+        background-color: #dc2f3d;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .filters form {
+            gap: 10px;
+        }
+
+        .filters .form-group {
+            min-width: 160px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .filters form {
+            flex-direction: column;
+        }
+
+        .filters .form-group {
+            width: 100%;
+        }
+
+        .filters .d-flex {
+            width: 100%;
+        }
+
+        .filters .btn-primary {
+            width: 100%;
+        }
     }
 
     .news_display_container ul {
@@ -436,11 +544,6 @@
         color: #f1c40f;
     }
 
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 30px;
-    }
 
     .col-lg-6,
     .col-md-6 {
