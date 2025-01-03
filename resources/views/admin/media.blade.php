@@ -82,31 +82,11 @@
         background-color: #f8f9fa;
     }
 
-    .stats-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-    }
-
-    .stats-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .stats-icon {
-        font-size: 2.5rem;
-        color: #ff9f43;
-        margin-bottom: 15px;
-    }
-
     .table-container {
         background-color: #ffffff;
         padding: 30px;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
     }
 
     .table td, .table th {
@@ -117,7 +97,10 @@
     .table th {
         background-color: #343a40;
         color: white;
-        border: none;
+    }
+
+    .table thead th {
+        border-top: 1px solid #ddd;
     }
 
     .table tbody td {
@@ -139,21 +122,25 @@
         font-size: 16px;
         font-weight: bold;
         color: #333;
+        line-height: 1.5;
     }
 
     .btn {
         font-size: 14px;
-        padding: 8px 16px;
     }
 
-    .badge {
-        padding: 8px 12px;
-        border-radius: 50px;
-    }
-
-    .alert {
+    .modal-content {
         border-radius: 10px;
-        margin-bottom: 20px;
+    }
+
+    .modal-header {
+        background-color: #f8f9fa;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #ff9f43;
     }
 </style>
 
@@ -165,7 +152,7 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="container-fluid d-flex justify-content-between align-items-center">
-            <h4 class="m-0">Manage Fields</h4>
+            <h4 class="m-0">Media Management</h4>
             <div class="d-flex align-items-center">
                 <div class="profile-icon"></div>
                 <div class="user-name ms-3">
@@ -191,61 +178,43 @@
 
     <!-- Main Content -->
     <div class="content-area">
-        <!-- Stats Card -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-4">
-                <div class="stats-card">
-                    <i class="bi bi-person-lines-fill stats-icon"></i>
-                    <h5>Total Fields</h5>
-                    <h3 class="mt-2">{{ $totalFields }}</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- Fields Table -->
         <div class="table-container">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="mb-0">Fields List</h5>
-                <a href="{{ route('admin.createField') }}" class="btn btn-primary">Add New Field</a>
+                <h1 class="mb-0">Media Files</h1>
+                <a href="#addMediaModal" class="btn btn-primary" data-bs-toggle="modal">Add New Media</a>
             </div>
 
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Field Name</th>
-                    <th>Location</th>
-                    <th>Availability</th>
-                    <th>Price</th>
-                    <th>Status</th>
+                    <th>Path</th>
+                    <th>Type</th>
+                    <th>User</th>
+                    <th>Description</th>
+                    <th>Title</th>
+                    <th>Created At</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
+
                 <tbody>
-                @foreach($fields as $field)
+                @foreach ($media as $item)
                     <tr>
-                        <td>{{ $field->id }}</td>
-                        <td>{{ $field->field_name }}</td>
-                        <td>{{ $field->location }}</td>
-                        <td>{{ $field->availability }}</td>
-                        <td>${{ $field->price }}</td>
+                        <td>{{ $item->id }}</td>
+                        <td><a href="{{ asset('storage/' . $item->path) }}" target="_blank">View File</a></td>
+                        <td>{{ $item->type }}</td>
+                        <td>{{ $item->user_id }}</td>
+                        <td>{{ $item->description }}</td>
+                        <td>{{ $item->title }}</td>
+                        <td>{{ $item->created_at }}</td>
                         <td>
-                                    <span class="badge {{ $field->status == 'active' ? 'bg-success' : 'bg-danger' }}">
-                                        {{ $field->status == 'active' ? 'Active' : 'Inactive' }}
-                                    </span>
-                        </td>
-                        <td>
-                            <a href="{{ route('admin.editField', $field->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form id="deleteForm-{{ $field->id }}" action="{{ route('admin.deleteField', $field->id) }}" method="POST" class="d-inline">
+                            <form id="deleteForm-{{ $item->id}}" action="{{ route('admin.media.destroy', $item->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $field->id}})">
+                                <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $item->id}})">
                                     <i class="bi bi-trash"></i> Delete
-                                </button>                             </form>
+                                </button>                            </form>
                             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                             <script>
                                 function confirmDelete(id) {
@@ -290,6 +259,43 @@
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
+
+<!-- Add Media Modal -->
+<div class="modal fade" id="addMediaModal" tabindex="-1" aria-labelledby="addMediaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('admin.media.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMediaModalLabel">Add New Media</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="path" class="form-label">File</label>
+                        <input type="file" class="form-control" id="path" name="path" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Type</label>
+                        <input type="text" class="form-control" id="type" name="type" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 

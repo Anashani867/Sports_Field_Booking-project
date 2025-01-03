@@ -290,6 +290,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\FieldController;
+use App\Models\Field;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -297,6 +298,9 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashbordController;
+use App\Models\Booking;
+use App\Models\Media;
+
 
 
 
@@ -355,7 +359,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 // الصفحة الرئيسية ومسارات عامة
 Route::get('/', function () {
-    return view('welcome');
+    $latestBookings = Booking::latest()->take(5)->with('user')->get();
+    $fields = Field::all();
+    $media = Media::inRandomOrder()->take(5)->get();
+
+    return view('welcome' , compact('latestBookings','fields','media'));
 })->name('welcome');
 
 

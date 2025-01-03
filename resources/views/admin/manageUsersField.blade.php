@@ -156,9 +156,9 @@
 <div class="main">
     <!-- Navbar -->
     <nav class="navbar navbar-light bg-light d-flex justify-content-between px-3 py-2">
-        <h4 class="m-0">Manage Users</h4>
+        <h4 class="m-0">Manage Users Field</h4>
         <div class="d-flex align-items-center">
-            <div class="profile-icon" style="width: 40px; height: 40px; border-radius: 50%; background: url('path/to/user-avatar.jpg') no-repeat center center; background-size: cover; border: 2px solid #007bff;"></div>
+            <div class="profile-icon" style="width: 40px; height: 40px; border-radius: 50%;  background-size: cover; border: 2px solid #007bff;"></div>
             <div class="user-name ms-3">
                 <p class="m-0" style="font-weight: 600;"><?php echo e(Auth::user()->name); ?></p>
             </div>
@@ -214,7 +214,7 @@
 
     <!-- Filter Section -->
     <div class="filter-section">
-        <form method="GET" action="{{ route('admin.manageUsers') }}" class="row">
+        <form method="GET" action="{{ route('admin.manageUsersField') }}" class="row">
             <div class="col-md-4">
                 <input type="text" name="name" class="form-control" placeholder="Search by Name" value="{{ request()->get('name') }}">
             </div>
@@ -268,7 +268,7 @@
                             <td>{{ $contact->id }}</td>
                             <td>{{ $contact->name }}</td>
                             <td>{{ $contact->email }}</td>
-                            <td>{{ $contact->phone_number }}</td>
+                            <td>{{ $contact->phone }}</td>
                             <td>
                                 <span id="status-{{ $contact->id }}"
                                       class="badge {{ $contact->status == 'Active' ? 'bg-success' : 'bg-danger' }}">
@@ -280,10 +280,23 @@
                                 <a href="{{ route('admin.users.edit', $contact->id) }}" class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil"></i> Edit
                                 </a>
-                                <form id="deleteForm-{{ $contact->id }}" action="{{ route('admin.users.delete', $contact->id) }}" method="POST" style="display: inline;">
+{{--                                @if(session('success'))--}}
+{{--                                    <script>--}}
+{{--                                        document.addEventListener('DOMContentLoaded', function() {--}}
+{{--                                            Swal.fire({--}}
+{{--                                                title: 'Success!',--}}
+{{--                                                text: '{{ session('success') }}',--}}
+{{--                                                icon: 'success',--}}
+{{--                                                confirmButtonText: 'OK'--}}
+{{--                                            });--}}
+{{--                                        });--}}
+{{--                                    </script>--}}
+{{--                                @endif--}}
+
+                                <form id="deleteForm-{{ $contact->id }}" action="{{ route('admin.manageUsersField.delete', $contact->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button"class="btn btn-sm btn-danger" onclick="confirmDelete({{ $contact->id }})">
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $contact->id }})">
                                         <i class="bi bi-trash"></i> Delete
                                     </button>
                                 </form>
@@ -326,6 +339,8 @@
                                     });
                                     @endif
                                 </script>
+
+
                                 <form action="{{ route('admin.users.updateStatus', $contact->id) }}" method="post" style="display: inline;">
                                     @csrf
                                     @method('PATCH')

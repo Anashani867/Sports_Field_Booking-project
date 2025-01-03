@@ -205,7 +205,7 @@
                             </td>
                             <td>
                                 @switch($payment->payment_status)
-                                    @case('Completed')
+                                    @case('paid')
                                         <span class="badge bg-success">Completed</span>
                                         @break
                                     @case('Pending')

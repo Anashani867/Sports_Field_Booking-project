@@ -219,9 +219,9 @@
         <tbody id="bookingTable">
         @foreach($Booking as $Book)
             <tr>
-                <td>{{ $Book->field_name ?? 'Unknown Field' }}</td>
-            <td>{{ date('Y-m-d', strtotime($Book->date_time)) }}</td>
-            <td>{{ date('H:i', strtotime($Book->date_time)) }} - {{ date('H:i', strtotime($Book->date_time . ' +2 hours')) }}</td>
+                <td>{{isset($Book->field) ? $Book->field->field_name : 'No field' }}</td>
+            <td>{{ date('Y-m-d', strtotime($Book->booking_date)) }}</td>
+            <td>{{ date('H:i', strtotime($Book->start_date_time)) }} - {{ date('H:i', strtotime($Book->end_date_time . ' +2 hours')) }}</td>
             <td>
                             <span class="badge
                                 @if($Book->status == 'confirmed') bg-success

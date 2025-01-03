@@ -74,7 +74,7 @@
     }
 
     .card-header {
-        background-color: #007bff;
+        background-color: #050651;
         color: white;
         font-size: 18px;
         font-weight: bold;
@@ -108,7 +108,7 @@
 
     .form-control:focus,
     .form-select:focus {
-        border-color: #007bff;
+        border-color: #0a1a51;
         outline: none;
         box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
     }
@@ -120,8 +120,8 @@
     }
 
     .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
+        background-color: #171c4c;
+        border-color: #050651;
     }
 
     .btn-primary:hover {
@@ -164,23 +164,37 @@
                     <!-- Date and Time -->
                     <div class="mb-3">
                         <label for="date_time" class="form-label">Date and Time</label>
-                        <input type="datetime-local" name="date_time" id="date_time" class="form-control" value="{{ \Carbon\Carbon::parse($booking->date_time)->format('Y-m-d\TH:i') }}" required>
-                    </div>
+                        <input type="datetime-local" name="start_date_time" id="start_date_time" class="form-control" value="{{ \Carbon\Carbon::parse($booking->start_date_time
+)->format('Y-m-d\TH:i') }}" required>
+                        @error('start_date_time')
 
-                    <!-- Status -->
-                    <div class="mb-3">
-                        <label for="status" class="form-label">Status</label>
-                        <select name="status" id="status" class="form-select" required>
-                            <option value="pending" {{ $booking->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="confirmed" {{ $booking->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                            <option value="canceled" {{ $booking->status == 'canceled' ? 'selected' : '' }}>Canceled</option>
-                        </select>
                     </div>
+                    @enderror
+
+                    <div class="mb-3">
+                        <label for="date_time" class="form-label">Date and Time</label>
+                        <input type="datetime-local" name="end_date_time" id="end_date_time" class="form-control" value="{{ \Carbon\Carbon::parse($booking->end_date_time
+)->format('Y-m-d\TH:i') }}" required>
+                        @error('end_date_time')
+
+                    </div>
+                    @enderror
+
+
+                    {{--                    <!-- Status -->--}}
+{{--                    <div class="mb-3">--}}
+{{--                        <label for="status" class="form-label">Status</label>--}}
+{{--                        <select name="status" id="status" class="form-select" required>--}}
+{{--                            <option value="pending" {{ $booking->status == 'pending' ? 'selected' : '' }}>Pending</option>--}}
+{{--                            <option value="confirmed" {{ $booking->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>--}}
+{{--                            <option value="canceled" {{ $booking->status == 'canceled' ? 'selected' : '' }}>Canceled</option>--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
 
                     <!-- Amount -->
                     <div class="mb-3">
                         <label for="amount" class="form-label">Amount</label>
-                        <input type="number" name="amount" id="amount" class="form-control" value="{{ $booking->amount }}" required min="0" step="0.10">
+                        <input type="number" name="amount" id="amount" class="form-control" value="{{ $booking->amount }}" readonly>
                     </div>
 
                     <div class="d-flex justify-content-between">

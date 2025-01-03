@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreContactRequest;
 use App\Models\Contact;
 use App\Models\User;
+use App\Models\UserField;
 use App\Models\Booking;
 use App\Models\payment;
 use App\Models\Field;
@@ -69,7 +70,7 @@ class AdminDashbordController extends Controller
             $update_user = User::where('id', $request->user_id)->update([
                 'name' => $request->full_name,
                 'email' => $request->email,
-                'phone_number' => $request->phone_number,
+                'phone_number' => json_encode(['value' => $request->input('phone_number')]), // تحويل الرقم إلى JSON
             ]);
 
             return redirect('/admin/manageUsers')->with('success', 'User Updated Successfully');
@@ -117,15 +118,7 @@ class AdminDashbordController extends Controller
 
 
 
-    public function deleteUser($id)
-    {
-        try {
-            User::findOrFail($id)->delete();
-            return redirect()->route('admin.manageUsers')->with('success', 'User Deleted successfully!');
-        } catch (\Exception $e) {
-            return redirect()->route('admin.manageUsers')->with('fail', $e->getMessage());
-        }
-    }
+
 
 
 
@@ -187,10 +180,14 @@ class AdminDashbordController extends Controller
 
     public function updateBooking(Request $request, $id)
     {
-            $request->validate([
+//        dd($request->all()); // عرض البيانات المرسلة
+
+
+        $request->validate([
 //                'field_id' => 'required|exists:fields,id', // Ensure the field_id exists in the fields table
-                'date_time' => 'required|date|after:now', // Validate date_time as a date and ensure it’s in the future
-                'status' => 'required|in:pending,confirmed,canceled', // Ensure status is one of the allowed values
+            'start_date_time' => 'required|date|after:now',
+            'end_date_time' => 'required|date|after:start_date_time',
+            'status' => 'required|in:pending,confirmed,canceled', // Ensure status is one of the allowed values
                 'amount' => 'required|numeric|min:0',  // تحقق من أن المبلغ رقمي وغير سالب
 
 
@@ -198,10 +195,13 @@ class AdminDashbordController extends Controller
 
         $Booking = Booking::findOrFail($id);
         $Booking->update([
-            'date_time' => $request->date_time,
+            'start_date_time' => $request->input('start_date_time'),
+            'end_date_time' => $request->input('end_date_time'),
             'status' => $request->status,
             'amount' => $request->amount,
-        ]);//        dd($Booking);
+        ]);
+        dd($Booking);
+
         return redirect()->route('admin.manageBookings')->with('success', 'Booking updated successfully!');
     }
 
@@ -242,8 +242,52 @@ public function manageFields()
 
         // تمرير الإحصائيات والبيانات إلى الـ View
         return view('admin.manageUsers', compact('Users', 'totalUsers', 'activeUsers', 'inactiveUsers'));
+    }
+
+
+    public function deleteUser($id)
+    {
+        try {
+            User::findOrFail($id)->delete();
+            return redirect()->route('admin.manageUsers')->with('success', 'User Deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.manageUsers')->with('fail', $e->getMessage());
+        }
+    }
+public function manageUsersField(Request $request)
+    {
+        $totalUsers = UserField::count(); // عدد جميع المستخدمين
+        $activeUsers = UserField::where('status', 'active')->count(); // عدد المستخدمين النشطين
+        $inactiveUsers = UserField::where('status', 'inactive')->count(); // عدد المستخدمين غير النشطين
+
+        $Users = UserField::query();
+
+        if ($request->has('name')) {
+            $Users->where('name', 'like', '%' . $request->name . '%');
+        }
+        if ($request->has('email')) {
+            $Users->where('email', 'like', '%' . $request->email . '%');
+        }
+        if ($request->has('status')) {
+            $Users->where('status', $request->status);
+        }
+
+        $Users = $Users->get();
+
+        return view('admin.manageUsersField', compact('Users', 'totalUsers', 'activeUsers', 'inactiveUsers'));
 
     }
+
+    public function deleteUsersField($id)
+    {
+        try {
+            UserField::findOrFail($id)->delete();
+            return redirect()->route('admin.manageUsersField')->with('success', 'User Deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.manageUsersField')->with('fail', $e->getMessage());
+        }
+    }
+
     public function payments()
     {
         return view('admin.payments');
@@ -254,9 +298,17 @@ public function manageFields()
         return view('admin.analytics');
     }
 
-    public function settings()
+    public function showContacts()
     {
-        return view('admin.settings');
+        $contacts = Contact::all();
+        return view('admin.contact', compact('contacts'));
+    }
+    public function destroyContacts($id)
+    {
+        $contact = Contact::findOrFail($id); // Find the contact by ID
+        $contact->delete(); // Delete the contact
+
+        return redirect()->route('admin.contact')->with('success', 'Contact deleted successfully!');
     }
 
 

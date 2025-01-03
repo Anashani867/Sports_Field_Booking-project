@@ -46,11 +46,12 @@ class ThemeController extends Controller
 
 
 
-    public function shop()
-    {
-        return view('theme.shop');
-
-    }  public function contact()
+//    public function shop()
+//    {
+//        return view('theme.shop');
+//
+//    }
+    public function contact()
 {
 //        $data = Contact::all();
 //        dd($data);

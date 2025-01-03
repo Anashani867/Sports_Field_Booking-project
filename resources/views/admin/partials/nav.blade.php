@@ -5,10 +5,13 @@
         <li><a href="{{route('admin.manageBookings')}}"><i class="bi bi-calendar-event"></i> Manage Bookings</a></li>
         <li><a href="{{route('admin.manageFields')}}"><i class="bi bi-geo-alt"></i> Manage Fields</a></li>
         <li><a href={{route('admin.manageUsers')}}><i class="bi bi-people"></i> Manage Users</a></li>
-        <li><a href="{{route('admin.payments')}}"><i class="bi bi-cash-stack"></i> Payments</a></li>
+        <li><a href={{route('admin.manageUsersField')}}><i class="bi bi-people"></i> Manage UsersField</a></li>
         <hr>
+        <li><a href="{{route('admin.payments')}}"><i class="bi bi-cash-stack"></i> Payments</a></li>
         <li><a href="{{route('admin.analytics')}}"><i class="bi bi-graph-up"></i> Analytics</a></li>
-        <li><a href="{{route('admin.settings')}}"><i class="bi bi-gear"></i> Settings</a></li>
+        <li><a href="{{route('admin.contact')}}"><i class="bi bi-envelope"></i> Contact Us</a></li>
+        <li><a href="{{route('admin.media')}}"><i class="bi bi-file-earmark"></i> Blog</a></li>
+
     </ul>
 
 

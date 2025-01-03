@@ -73,7 +73,7 @@
     }
 
     .card-header {
-        background-color: #007bff;
+        background-color: #050651;
         color: white;
         font-size: 18px;
         font-weight: bold;
@@ -107,9 +107,9 @@
 
     .form-control:focus,
     .form-select:focus {
-        border-color: #007bff;
+        border-color: #050651;
         outline: none;
-        box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+        box-shadow: 0 0 4px rgb(5, 6, 81);
     }
 
     .btn {
@@ -119,12 +119,12 @@
     }
 
     .btn-primary {
-        background-color: #007bff;
+        background-color: #050651;
         border-color: #007bff;
     }
 
     .btn-primary:hover {
-        background-color: #0056b3;
+        background-color: #090997;
     }
 
     .btn-secondary {

@@ -115,8 +115,6 @@ class MediaController extends Controller
         return redirect()->back()->with('error', 'No file selected.');
     }
 
-
-
     // دالة لعرض الوسائط
     public function index()
     {
@@ -125,5 +123,44 @@ class MediaController extends Controller
 
         return view('theme.blog', compact('media'));
     }
+
+
+    public function indexAdmin()
+    {
+        $media = Media::all();
+        return view('admin.media', compact('media'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'path' => 'required|file',
+            'type' => 'required|string',
+            'description' => 'nullable|string',
+            'title' => 'nullable|string',
+        ]);
+
+        $file = $request->file('path');
+        $path = $file->store('uploads', 'public');
+
+        Media::create([
+            'path' => $path,
+            'type' => $request->type,
+            'user_id' => auth()->id(),
+            'description' => $request->description,
+            'title' => $request->title,
+        ]);
+
+        return redirect()->route('admin.media')->with('success', 'Media uploaded successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $media = Media::findOrFail($id);
+        $media->delete();
+
+        return redirect()->route('admin.media')->with('success', 'Media deleted successfully.');
+    }
+
 
 }

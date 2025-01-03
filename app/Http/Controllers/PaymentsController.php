@@ -125,17 +125,22 @@ class PaymentsController extends Controller
 
         // Step 5: Create the booking
         $booking = Booking::create([
-            'field_id' => $request->input('field_id'),
-            'user_id' => auth()->id(),
+            'field_id' => $request->input('field_id'), // تأكد من أن الحقل موجود في الطلب
+            'user_id' => auth()->id(), // الحصول على معرف المستخدم الحالي
+            'field_name' => $field ? $field->field_name : null, // اسم الحقل من جدول fields
+            'name' => auth()->user()->name, // اسم المستخدم من المصادقة // استخدام اسم افتراضي إذا لم يتم تمريره
             'booking_date' => $request->input('booking_date'),
-            'start_date_time' => $startDateTime,
-            'end_date_time' => $endDateTime,
+            'start_date_time' => $startDateTime, // يتم تمريره بشكل صحيح
+            'end_date_time' => $endDateTime, // يتم تمريره بشكل صحيح
             'amount' => $request->input('amount'),
             'payment_method' => $request->input('payment_method'),
-            'payment_status' => 'pending',
-            'latitude' => $latitude,  // Retrieved from the field
-            'longitude' => $longitude, // Retrieved from the field
+            'payment_status' => $request->input('payment_status') ?? 'pending', // حالة الدفع الافتراضية
+            'status' => $request->input('status') ?? 'confirmed', // حالة الدفع الافتراضية
+            'latitude' => $field ? $field->latitude  : 'default_latitude', // استخدام قيمة افتراضية إذا لم يتم تحديدها
+            'longitude' => $field ? $field->longitude  : 'default_longitude', // استخدام قيمة افتراضية إذا لم يتم تحديدها
         ]);
+
+
 
         // Step 6: Process the payment
         $paymentStatus = $this->processPayment($request->payment_method, $request->amount);
@@ -164,7 +169,10 @@ class PaymentsController extends Controller
 
         // If payment fails, redirect back with an error
         return redirect()->back()->with('error', 'Payment failed, please try again!');
-    }//public function processPayment(Request $request)
+    }
+
+
+    //public function processPayment(Request $request)
 //{
 //    $validatedData = $request->validate([
 //        'payment_method_id' => 'required',

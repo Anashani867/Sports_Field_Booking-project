@@ -9,22 +9,25 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id',
+    protected $fillable = [
+        'user_id',
         'field_id',
-        'name',
-        'start_time',
-        'end_time',
+        'name',            // Mass-assignable
+        'field_name',      // Mass-assignable if necessary
         'start_date_time',
         'end_date_time',
         'date_time',
         'status',
         'amount',
+        'latitude',
+        'longitude',
         'booking_date',
         'booking_time',
         'booking_status',
         'payment_method',
         'payment_status',
     ];
+
 
     public function user()
     {

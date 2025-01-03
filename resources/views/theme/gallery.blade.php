@@ -311,7 +311,10 @@
 
 
                     <div class="tab-content news_display_container clearfix">
+                        <a class="prv club_prev slick-arrow" style="display: inline;"></a>
+                        <a class="nxt club_next slick-arrow" style="display: inline;"></a>
                         <ul id="club_news" class="tab-pane active row">
+
                             @foreach($fields as $field)
                                 <li class="field-card col-lg-6 col-md-6 col-sm-12 mb-4">
                                     <div class="card">
@@ -333,7 +336,7 @@
                                             </div>
                                             <div class="news_date clearfix">
                                                 <span>{{ $field->availability }}</span>
-                                                <span class="like">❤ 45</span>
+{{--                                                <span class="like">❤ 45</span>--}}
                                             </div>
                                         </a>
                                     </div>

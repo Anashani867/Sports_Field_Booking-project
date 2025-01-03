@@ -265,8 +265,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('manageBookings', [BookingController::class, 'index'])->name('manageBookings');
         Route::get('manageFields', [FieldController::class, 'index'])->name('manageFields');
         Route::get('manageUsers', [AdminDashbordController::class, 'manageUsers'])->name('manageUsers');
+        Route::get('manageUsersField', [AdminDashbordController::class, 'manageUsersField'])->name('manageUsersField');
+        Route::delete('/admin/manageUsersField/{id}', [AdminDashbordController::class, 'deleteUsersField'])->name('manageUsersField.delete');
         Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('analytics');
-        Route::get('settings', [AdminDashbordController::class, 'settings'])->name('settings');
+        Route::get('contacts', [AdminDashbordController::class, 'showContacts'])->name('contact');
+        Route::get('/contacts/{id}/edit', [AdminDashbordController::class, 'edit'])->name('admin.contacts.edit');
+        Route::delete('/admin/contacts/{id}', [AdminDashbordController::class, 'destroyContacts'])->name('contacts.destroy');
+        Route::get('/admin/media', [MediaController::class, 'indexAdmin'])->name('media');
+        Route::post('/admin/media', [MediaController::class, 'store'])->name('media.store');
+        Route::delete('/admin/media/{id}', [MediaController::class, 'destroy'])->name('media.destroy');
+
+
     });
 
     Route::middleware('auth:admin')->group(function () {
