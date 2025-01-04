@@ -298,6 +298,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashbordController;
+use App\Http\Controllers\AdminProfileController;
 use App\Models\Booking;
 use App\Models\Media;
 
@@ -348,11 +349,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/field/{id}', [FieldController::class, 'showFieldDetails'])->name('Field.Details');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth:admin'])->group(function () {
+    // Route to show the profile edit form (GET method)
+    Route::get('/admin/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+
+    // Route to handle the profile update (PUT or PATCH method)
+    Route::put('/admin/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
 });
+
 
 
     // تسجيل الخروج

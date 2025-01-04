@@ -126,19 +126,38 @@ class FieldController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        // Validate the input data
+        $validated = $request->validate([
             'field_name' => 'required|string|max:255',
             'location' => 'required|string',
             'availability' => 'required|string',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|min:0',
             'owner_id' => 'nullable|exists:users,id',
             'admin_id' => 'nullable|exists:users,id',
+            'start_date' => 'required|date',  // Add validation for start_date
+            'end_date' => 'required|date',    // Add validation for end_date
         ]);
 
+        // Find the field record to update
         $field = Field::findOrFail($id);
-        $field->update($request->all());
+
+        // Update the field with new data
+        $field->field_name = $request->input('field_name');
+        $field->location = $request->input('location');
+        $field->availability = $request->input('availability');
+        $field->price = $request->input('price');
+        $field->owner_id = $request->input('owner_id');
+        $field->admin_id = $request->input('admin_id');
+        $field->start_date = $request->input('start_date');  // Set the new start_date
+        $field->end_date = $request->input('end_date');      // Set the new end_date
+
+        // Save the updated field
+        $field->save();
+
+        // Redirect with a success message
         return redirect()->route('admin.manageFields')->with('success', 'Field updated successfully!');
     }
+
 
     public function destroy($id)
     {

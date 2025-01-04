@@ -221,6 +221,10 @@
                     <th>Location</th>
                     <th>Availability</th>
                     <th>Price</th>
+                    <th>start_time</th>
+                    <th>end_time</th>
+                    <th>start_date</th>
+                    <th>end_date</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -232,11 +236,17 @@
                         <td>{{ $field->field_name }}</td>
                         <td>{{ $field->location }}</td>
                         <td>{{ $field->availability }}</td>
-                        <td>${{ $field->price }}</td>
+                        <td>JD{{ $field->price }}</td>
+                        <td>{{ $field->start_time }}</td>
+                        <td>{{ $field->end_time }}</td>
+                        <td>{{ $field->start_date }}</td>
+                        <td>{{ $field->end_date }}</td>
                         <td>
-                                    <span class="badge {{ $field->status == 'active' ? 'bg-success' : 'bg-danger' }}">
-                                        {{ $field->status == 'active' ? 'Active' : 'Inactive' }}
-                                    </span>
+                                  <span class="badge
+    {{ $field->status == 'active' ? 'bg-success' : ($field->status == 'fully_booked' ? 'bg-warning' : 'bg-danger') }}">
+    {{ $field->status == 'active' ? 'Active' : ($field->status == 'fully_booked' ? 'Fully Booked' : 'Inactive') }}
+</span>
+
                         </td>
                         <td>
                             <a href="{{ route('admin.editField', $field->id) }}" class="btn btn-warning btn-sm">Edit</a>

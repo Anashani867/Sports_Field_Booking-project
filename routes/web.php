@@ -305,9 +305,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
     Route::get('/get-available-times/{fieldId}/{bookingDate}', [PaymentsController::class, 'getAvailableTimes']);
 
+
+
     Route::middleware(['auth:admin'])->group(function () {
-    Route::match(['put', 'get'],'/admin/profile/update', [AdminProfileController::class, 'edit'])->name('profile.update');
+        // Route to show the profile edit form (GET method)
+        Route::get('/admin/profile/update', [AdminProfileController::class, 'edit'])->name('profile.edit');
+
+        // Route to handle the profile update (PUT or PATCH method)
+        Route::match(['put', 'patch'], '/admin/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
     });
+
 
     Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 

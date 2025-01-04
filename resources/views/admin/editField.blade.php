@@ -174,11 +174,23 @@
                         <input type="number" name="price" id="price" class="form-control" value="{{ $field->price }}" required min="0" step="0.01">
                     </div>
 
+                    <!-- Start Date Field -->
+                    <div class="mb-3">
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $field->start_date ? \Carbon\Carbon::parse($field->start_date)->format('Y-m-d') : '' }}" required>
+                    </div>
+
+                    <!-- End Date Field -->
+                    <div class="mb-3">
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control" value="{{ $field->end_date ? \Carbon\Carbon::parse($field->end_date)->format('Y-m-d') : '' }}" required>
+                    </div>
+
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
                         <select name="status" id="status" class="form-select" required>
                             <option value="active" {{ $field->status == 'active' ? 'selected' : '' }}>Active</option>
-                            <option value="inactive" {{ $field->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                            <option value="fully_booked" {{ $field->status == 'fully_booked' ? 'selected' : '' }}>Fully Booked</option> <!-- خيار جديد -->
                         </select>
                     </div>
 

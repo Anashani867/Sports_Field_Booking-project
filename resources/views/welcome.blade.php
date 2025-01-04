@@ -120,7 +120,7 @@
                 <h2 class="ls-l bannertext01 italic01 layercontent04"
                     data-ls="offsetxin:left; scalexin:9; durationin: 4000;">starts</h2><h4
                     class="ls-l bannertext02 layercontent05" data-ls="offsetxin:left; rotatexin:90 ; durationin: 4500;">
-                    <a href="{{route('bookTickets')}}" style="color: whitesmoke">book my ticket</a></h4>
+                    <a href="{{route('theme.gallery')}}" style="color: whitesmoke">book my ticket</a></h4>
 
                 <h2 class="ls-l bannertext01 layercontent06" style="left: 87%; top:760px;"
                     data-ls="offsetxin:left; flipxin:90 ; durationin: 5000;">5<sup>st</sup></h2><h6
@@ -157,7 +157,7 @@
 
                             <p role=tabpanel class="tab-pane fade" id=Status>  Check the status of your reservations. Please ensure to have your booking ID handy for quick access.
                                 <br><br>
-                                <strong>Status:</strong> Available / NONAvailable
+                                <strong>Status:</strong> Available / Fully Booked
                                 <br>
                                 For more details, contact support.
                             </p>
