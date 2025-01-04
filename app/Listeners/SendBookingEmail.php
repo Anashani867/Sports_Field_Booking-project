@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Listeners;
 
 use App\Events\BookingCreated;
@@ -16,8 +15,13 @@ class SendBookingEmail
      */
     public function handle(BookingCreated $event)
     {
-        // إرسال البريد الإلكتروني باستخدام Mailable
-        Mail::to($event->booking->user->email)
-            ->send(new BookingEmail($event->booking));
+        $booking = $event->booking; // استرجاع الحجز من الحدث
+        $user = $booking->user; // استرجاع المستخدم المرتبط بالحجز (تأكد من وجود العلاقة في النموذج)
+
+        if ($user) {
+            // تمرير الحجز والمستخدم إلى BookingEmail
+            Mail::to($user->email)
+                ->send(new BookingEmail($booking, $user));
+        }
     }
 }

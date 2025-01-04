@@ -85,30 +85,98 @@ class PaymentsController extends Controller
         return false;  // إذا فشل الدفع
     }
 
+    public function getAvailableTimes($fieldId, $bookingDate)
+    {
+        // استرجاع بيانات الملعب
+        $field = Field::findOrFail($fieldId);
 
+        // استرجاع الأوقات المحجوزة للتاريخ المحدد
+        $reservedTimes = Booking::where('field_id', $fieldId)
+            ->where('booking_date', $bookingDate)
+            ->get(['start_date_time', 'end_date_time']);
+
+        // تحديد الأوقات المتاحة بناءً على ساعات العمل للملعب
+        $availableTimes = [];
+        $startTime = strtotime($field->start_time); // وقت الفتح
+        $endTime = strtotime($field->end_time);   // وقت الإغلاق
+
+        while ($startTime < $endTime) {
+            $timeSlotStart = date('H:i', $startTime);
+            $timeSlotEnd = date('H:i', $startTime + 3600); // زيادة ساعة واحدة
+
+            $isAvailable = true;
+
+            // التحقق من عدم وجود حجز يتعارض مع هذا الوقت
+            foreach ($reservedTimes as $booking) {
+                if (($timeSlotStart >= $booking->start_date_time && $timeSlotStart < $booking->end_date_time) ||
+                    ($timeSlotEnd > $booking->start_date_time && $timeSlotEnd <= $booking->end_date_time)) {
+                    $isAvailable = false;
+                    break;
+                }
+            }
+
+            if ($isAvailable) {
+                $availableTimes[] = $timeSlotStart;
+            }
+
+            $startTime += 3600; // زيادة ساعة واحدة
+        }
+
+        return $availableTimes;
+    }
     public function bookAndPay(Request $request)
     {
-        // Step 1: Validate the request data
-        $validatedData = $request->validate([
-            'field_id' => 'required|exists:fields,id',
-            'booking_date' => 'required|date',
-            'start_date_time' => 'required|date_format:H:i',
-            'end_date_time' => 'required|date_format:H:i|after:start_date_time',
-            'payment_method' => 'required|string|in:credit_card,paypal',
-            'amount' => 'required|numeric|min:0',
-        ]);
+            // Step 1: Validate the request data
+            $validatedData = $request->validate([
+                'field_id' => 'required|exists:fields,id',
+                'booking_date' => 'required|date',
+                'start_date_time' => 'required|date_format:H:i',
+                'end_date_time' => 'required|date_format:H:i|after:start_date_time',
+                'payment_method' => 'required|string|in:credit_card,paypal',
+                'amount' => 'required|numeric|min:0',
+            ]);
 
-        // Step 2: Format the start and end date-time
-        $startDateTime = $request->input('booking_date') . ' ' . $request->input('start_date_time');
-        $endDateTime = $request->input('booking_date') . ' ' . $request->input('end_date_time');
+            // Step 2: Format the start and end date-time
+            $startDateTime = $request->input('booking_date') . ' ' . $request->input('start_date_time');
+            $endDateTime = $request->input('booking_date') . ' ' . $request->input('end_date_time');
 
-        // Step 3: Retrieve the field and its location data
-        $field = Field::findOrFail($request->input('field_id'));
-        $latitude = $field->latitude;
-        $longitude = $field->longitude;
+            // Step 3: Retrieve the field
+            $field = Field::findOrFail($request->input('field_id'));
 
-        // Step 4: Check for overlapping bookings
-        $existingBooking = Booking::where('field_id', $request->input('field_id'))
+            // Step 4: Check for overlapping bookings
+            if ($this->hasOverlappingBooking($request->input('field_id'), $startDateTime, $endDateTime)) {
+                return redirect()->back()->with('error', 'This time slot is already booked!');
+            }
+
+            // Step 5: Create the booking
+            $booking = $this->createBooking($request, $field, $startDateTime, $endDateTime);
+
+            // Step 6: Process the payment
+            $paymentStatus = $this->processPayment($request->payment_method, $request->amount);
+
+            if ($paymentStatus) {
+                // Update booking payment status
+                $booking->payment_status = 'paid';
+                $booking->save();
+
+                // Log payment
+                $this->logPayment($booking, $request);
+
+                // Trigger the BookingCreated event
+                event(new BookingCreated($booking));
+
+                return redirect()->route('bookTickets')->with('success', 'Booking successful and payment completed!');
+            }
+
+
+    }
+
+    /**
+     * Check for overlapping bookings.
+     */
+    private function hasOverlappingBooking($fieldId, $startDateTime, $endDateTime)
+    {
+        return Booking::where('field_id', $fieldId)
             ->where(function ($query) use ($startDateTime, $endDateTime) {
                 $query->whereBetween('start_date_time', [$startDateTime, $endDateTime])
                     ->orWhereBetween('end_date_time', [$startDateTime, $endDateTime])
@@ -118,59 +186,43 @@ class PaymentsController extends Controller
                     });
             })
             ->exists();
-
-        if ($existingBooking) {
-            return redirect()->back()->with('error', 'This time slot is already booked!');
-        }
-
-        // Step 5: Create the booking
-        $booking = Booking::create([
-            'field_id' => $request->input('field_id'), // تأكد من أن الحقل موجود في الطلب
-            'user_id' => auth()->id(), // الحصول على معرف المستخدم الحالي
-            'field_name' => $field ? $field->field_name : null, // اسم الحقل من جدول fields
-            'name' => auth()->user()->name, // اسم المستخدم من المصادقة // استخدام اسم افتراضي إذا لم يتم تمريره
-            'booking_date' => $request->input('booking_date'),
-            'start_date_time' => $startDateTime, // يتم تمريره بشكل صحيح
-            'end_date_time' => $endDateTime, // يتم تمريره بشكل صحيح
-            'amount' => $request->input('amount'),
-            'payment_method' => $request->input('payment_method'),
-            'payment_status' => $request->input('payment_status') ?? 'pending', // حالة الدفع الافتراضية
-            'status' => $request->input('status') ?? 'confirmed', // حالة الدفع الافتراضية
-            'latitude' => $field ? $field->latitude  : 'default_latitude', // استخدام قيمة افتراضية إذا لم يتم تحديدها
-            'longitude' => $field ? $field->longitude  : 'default_longitude', // استخدام قيمة افتراضية إذا لم يتم تحديدها
-        ]);
-
-
-
-        // Step 6: Process the payment
-        $paymentStatus = $this->processPayment($request->payment_method, $request->amount);
-
-        if ($paymentStatus) {
-            // Update booking payment status
-            $booking->payment_status = 'paid';
-            $booking->save();
-
-            // Log payment
-            Payment::create([
-                'booking_id' => $booking->id,
-                'user_id' => auth()->id(),
-                'amount' => $request->amount,
-                'payment_method' => $request->payment_method,
-                'payment_status' => 'paid',
-            ]);
-
-            // Trigger the BookingCreated event
-            event(new BookingCreated($booking));
-
-
-            return redirect()->route('bookTickets')->with('success', 'Booking successful and payment completed!');
-        }
-
-
-        // If payment fails, redirect back with an error
-        return redirect()->back()->with('error', 'Payment failed, please try again!');
     }
 
+    /**
+     * Create a new booking.
+     */
+    private function createBooking($request, $field, $startDateTime, $endDateTime)
+    {
+        return Booking::create([
+            'field_id' => $request->input('field_id'),
+            'user_id' => auth()->id(),
+            'field_name' => $field->field_name,
+            'name' => auth()->user()->name,
+            'booking_date' => $request->input('booking_date'),
+            'start_date_time' => $startDateTime,
+            'end_date_time' => $endDateTime,
+            'amount' => $request->input('amount'),
+            'payment_method' => $request->input('payment_method'),
+            'payment_status' => $request->input('payment_status') ?? 'pending',
+            'status' => $request->input('status') ?? 'confirmed',
+            'latitude' => $field->latitude,
+            'longitude' => $field->longitude,
+        ]);
+    }
+
+    /**
+     * Log the payment.
+     */
+    private function logPayment($booking, $request)
+    {
+        Payment::create([
+            'booking_id' => $booking->id,
+            'user_id' => auth()->id(),
+            'amount' => $request->amount,
+            'payment_method' => $request->payment_method,
+            'payment_status' => 'paid',
+        ]);
+    }
 
     //public function processPayment(Request $request)
 //{

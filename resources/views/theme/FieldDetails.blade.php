@@ -331,7 +331,6 @@
                                         <option value="">Select an end time</option>
                                     </select>
                                 </div>
-
                                 <!-- Payment Method -->
                                 <div style="margin-bottom: 20px; position: relative;">
                                     <i class="fa fa-credit-card" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"></i>
@@ -424,33 +423,27 @@
 
 <script>
     // تمرير البيانات من الخادم إلى JavaScript
-    const availableTimesByDay = @json($availableTimesByDay); // تمرير الأوقات المتاحة حسب اليوم
-    const reservedTimesByDay = @json($reservedTimesByDay); // تمرير الأوقات المحجوزة حسب اليوم
+
+    // تمرير البيانات من الخادم إلى JavaScript
+    const availableTimesByDay = @json($availableTimesByDay); // الأوقات المتاحة حسب اليوم
+    const reservedTimesByDay = @json($reservedTimesByDay); // الأوقات المحجوزة حسب اليوم
 
     // دالة لتحديث الأوقات المتاحة
     function updateAvailableTimes() {
         const selectedDate = document.getElementById('booking-date').value;
-        const today = new Date().toISOString().split('T')[0];  // الحصول على التاريخ الحالي بتنسيق YYYY-MM-DD
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);  // اليوم التالي
-        const tomorrowDate = tomorrow.toISOString().split('T')[0];
-
-        if (!selectedDate) {
-            // إذا لم يتم تحديد تاريخ، إعادة تعيين القوائم المنسدلة
-            document.getElementById('start-time').innerHTML = '<option value="">Select a start time</option>';
-            document.getElementById('end-time').innerHTML = '<option value="">Select an end time</option>';
-            return;
-        }
-
-        const availableTimes = availableTimesByDay[selectedDate] || [];
-        const reservedTimes = reservedTimesByDay[selectedDate] || [];
-
         const startTimeSelect = document.getElementById('start-time');
         const endTimeSelect = document.getElementById('end-time');
 
         // إعادة تعيين الخيارات
         startTimeSelect.innerHTML = '<option value="">Select a start time</option>';
         endTimeSelect.innerHTML = '<option value="">Select an end time</option>';
+
+        if (!selectedDate) {
+            return; // إذا لم يتم تحديد تاريخ، لا تفعل شيئًا
+        }
+
+        const availableTimes = availableTimesByDay[selectedDate] || [];
+        const reservedTimes = reservedTimesByDay[selectedDate] || [];
 
         // إذا لم تكن هناك أوقات متاحة، عرض رسالة مناسبة
         if (availableTimes.length === 0) {
@@ -459,70 +452,40 @@
             return;
         }
 
-        // ترتيب الأوقات (إذا كانت غير مرتبة)
-        availableTimes.sort((a, b) => {
-            const [hourA, minuteA] = a.split(':').map(Number);
-            const [hourB, minuteB] = b.split(':').map(Number);
-            return hourA - hourB || minuteA - minuteB;
-        });
-
-        // إضافة الخيارات المتاحة فقط
+        // إضافة الخيارات المتاحة والمحجوزة
         availableTimes.forEach(time => {
-            if (!reservedTimes.includes(time)) {
-                const startOption = document.createElement('option');
-                startOption.value = time;
-                startOption.textContent = time;
-                startTimeSelect.appendChild(startOption);
+            const isReserved = reservedTimes.includes(time); // التحقق مما إذا كان الوقت محجوزًا
 
-                const endOption = document.createElement('option');
-                endOption.value = time;
-                endOption.textContent = time;
-                endTimeSelect.appendChild(endOption);
+            const startOption = document.createElement('option');
+            startOption.value = time;
+            startOption.textContent = time + (isReserved ? ' (Booked)' : ''); // إضافة علامة (Booked) إذا كان الوقت محجوزًا
+            if (isReserved) {
+                startOption.disabled = true; // تعطيل الخيار إذا كان الوقت محجوزًا
+                startOption.style.textDecoration = 'line-through'; // وضع خط على النص
+                startOption.style.color = '#999'; // تغيير لون النص
             }
+            startTimeSelect.appendChild(startOption);
+
+            const endOption = document.createElement('option');
+            endOption.value = time;
+            endOption.textContent = time + (isReserved ? ' (Booked)' : '');
+            if (isReserved) {
+                endOption.disabled = true;
+                endOption.style.textDecoration = 'line-through';
+                endOption.style.color = '#999';
+            }
+            endTimeSelect.appendChild(endOption);
         });
-
-        // إذا كان اليوم التالي محجوز بالكامل، يجب أن يظهر ولكن مع أوقات غير متاحة
-        if (selectedDate === tomorrowDate) {
-            const tomorrowTimes = availableTimesByDay[tomorrowDate] || [];
-            if (tomorrowTimes.length === 0) {
-                startTimeSelect.innerHTML = '<option value="">No available times</option>';
-                endTimeSelect.innerHTML = '<option value="">No available times</option>';
-            }
-        }
     }
 
     // إضافة حدث لتحديث الأوقات عند تغيير التاريخ
     document.getElementById('booking-date').addEventListener('change', updateAvailableTimes);
-
-    // إضافة حدث لتحديث أوقات النهاية بناءً على وقت البداية المحدد
-    document.getElementById('start-time').addEventListener('change', function() {
-        const selectedStartTime = this.value;
-        const endTimeSelect = document.getElementById('end-time');
-
-        const availableTimes = availableTimesByDay[document.getElementById('booking-date').value] || [];
-        const reservedTimes = reservedTimesByDay[document.getElementById('booking-date').value] || [];
-
-        // إعادة تعيين الخيارات
-        endTimeSelect.innerHTML = '<option value="">Select an end time</option>';
-
-        // إضافة الخيارات بعد وقت البداية فقط
-        availableTimes.forEach(time => {
-            if (time > selectedStartTime && !reservedTimes.includes(time)) {
-                const option = document.createElement('option');
-                option.value = time;
-                option.textContent = time;
-                endTimeSelect.appendChild(option);
-            }
-        });
-    });
 
     // تحديث الأوقات عند تحميل الصفحة
     window.onload = function() {
         updateAvailableTimes();
     };
 
-
-    // Open the confirmation modal
     // وظيفة لفتح النافذة المنبثقة (Modal)
     function openModal() {
         document.getElementById('paymentModal').style.display = "block";

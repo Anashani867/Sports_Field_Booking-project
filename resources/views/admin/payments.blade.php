@@ -92,7 +92,7 @@
     <nav class="navbar navbar-light bg-light d-flex justify-content-between px-3 py-2">
         <h4 class="m-0">Payments Dashboard</h4>
         <div class="d-flex align-items-center">
-            <div class="profile-icon" style="width: 40px; height: 40px; border-radius: 50%; background: url('path/to/user-avatar.jpg') no-repeat center center; background-size: cover; border: 2px solid #007bff;"></div>
+            <div class="profile-icon" style="width: 40px; height: 40px; border-radius: 50%;  background-size: cover; border: 2px solid #007bff;"></div>
             <div class="user-name ms-3">
                 <p class="m-0" style="font-weight: 600;"><?php echo e(Auth::user()->name); ?></p>
             </div>
@@ -223,6 +223,7 @@
             </div>
         </div>
     </div>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
     @push('scripts')

@@ -123,7 +123,7 @@
     </div>
     <div class=footer-type02>
         <div class=container>
-            <div class=row><a href=index-2.html class=footer-logo><img src={{asset('assets')}}/images/logo.png alt=image></a>
+            <div class=row><a href={{route('welcome')}} class=footer-logo><img src={{asset('assets')}}/images/logo.png alt=image></a>
 
                 <div class=footer-container>
                     <ul class=clearfix>

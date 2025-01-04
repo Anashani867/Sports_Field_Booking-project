@@ -61,14 +61,15 @@
             <li><strong>Booking Date:</strong> {{ $booking->created_at }}</li>
             <li><strong>Customer Name:</strong> {{ $booking->user->name }}</li>
             <li><strong>Email:</strong> {{ $booking->user->email }}</li>
-            <li><strong>Phone Number:</strong> {{ $booking->user->phone }}</li>
+            <li><strong>Phone Number:</strong> {{ $user->phone_number}}</li>
             <li><strong>Booking Status:</strong> {{ $booking->status }}</li>
-            <li><strong>Total Amount:</strong> {{ $booking->total_amount }}</li>
-            <li><strong>Check-in Date:</strong> {{ $booking->check_in }}</li>
-            <li><strong>Check-out Date:</strong> {{ $booking->check_out }}</li>
+            <li><strong>Total Amount:</strong> {{ $booking->amount }}</li>
+            <li><strong>Check-in Date:</strong> {{ $booking->start_date_time }}</li>
+            <li><strong>Check-out Date:</strong> {{ $booking->end_date_time }}</li>
             <!-- Add more details as needed -->
         </ul>
     </div>
 </div>
+
 </body>
 </html>

@@ -303,6 +303,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/payments', [PaymentsController::class, 'dashboard'])->name('payments');
 });
+    Route::get('/get-available-times/{fieldId}/{bookingDate}', [PaymentsController::class, 'getAvailableTimes']);
 
     Route::middleware(['auth:admin'])->group(function () {
     Route::match(['put', 'get'],'/admin/profile/update', [AdminProfileController::class, 'edit'])->name('profile.update');
@@ -330,6 +331,8 @@ Route::middleware(['auth'])->group(function () {
 Route::controller(ThemeController::class)->name('theme.')->group(function () {
     Route::get('/about', 'about')->name('about');
     Route::get('/gallery', 'gallery')->name('gallery');
+    Route::get('/field/{id}',  'fieldDetails')->name('Field.Details');
+
 //    Route::get('/blog', 'blog')->name('blog');
     Route::get('/shop', 'shop')->name('shop');
     Route::get('/contact', 'contact')->name('contact');

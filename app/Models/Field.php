@@ -27,6 +27,7 @@ class Field extends Model
         'status',
         'latitude',
         'longitude',
+        'isFullyBooked',
     ];
 
 
@@ -44,5 +45,18 @@ class Field extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'field_id');
+    }
+
+    public function getIsFullyBookedAttribute()
+    {
+        $today = date('Y-m-d');
+        $reservedBookings = $this->bookings()
+            ->where(function ($query) use ($today) {
+                $query->whereBetween('start_date_time', ["$today 00:00:00", "$today 23:59:59"])
+                    ->orWhereBetween('end_date_time', ["$today 00:00:00", "$today 23:59:59"]);
+            })
+            ->exists();
+
+        return $reservedBookings;
     }
 }

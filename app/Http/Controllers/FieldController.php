@@ -458,52 +458,45 @@ class FieldController extends Controller
 
     public function showFieldDetails($fieldId, Request $request)
     {
-        // استرداد تفاصيل الحقل بناءً على المعرف
         $field = Field::find($fieldId);
 
-        // إذا لم يتم العثور على الحقل، إرجاع رسالة خطأ
         if (!$field) {
             return redirect()->back()->with('error', 'Field not found.');
         }
 
-        // استرداد التاريخ الذي اختاره المستخدم من الطلب (إن وجد)
-        $selectedDate = $request->input('booking_date') ?: null;
+        $selectedDate = $request->input('booking_date') ?: date('Y-m-d'); // تعيين تاريخ اليوم إذا لم يتم تحديده
         $today = date('Y-m-d');
+        $endDate = $field->end_date ?? date('Y-m-d', strtotime('+7 days', strtotime($today)));
 
-        // تحديد تاريخ النهاية بناءً على تاريخ النهاية المحدد في الحقل مباشرة
-        $endDate = $field->end_date;
-
-        // استرداد الحجوزات المحجوزة بناءً على start_date_time و end_date_time
+        // استرداد التواريخ المحجوزة بناءً على اليوم الحالي
         $reservedBookings = Booking::where('field_id', $fieldId)
-            ->where(function ($query) use ($today) {
-                $query->whereBetween('start_date_time', [$today . ' 00:00:00', $today . ' 23:59:59'])
-                    ->orWhereBetween('end_date_time', [$today . ' 00:00:00', $today . ' 23:59:59'])
-                    ->orWhere(function ($q) use ($today) {
-                        $q->where('start_date_time', '<', $today)
-                            ->where('end_date_time', '>', $today);
+            ->where(function ($query) use ($today ,$endDate) {
+                $query->whereBetween('start_date_time', ["$today 00:00:00", "$today 23:59:59"])
+                    ->orWhereBetween('end_date_time', ["$today 00:00:00", "$today 23:59:59"])
+                    ->orWhere(function ($q) use ($today , $endDate) {
+                        $q->where('start_date_time', '<=', "$endDate 23:59:59")
+                            ->where('end_date_time', '>=', "$today 00:00:00");
                     });
             })
             ->select('start_date_time', 'end_date_time')
             ->get();
 
-        // تعريف $reservedTimesByDay بعد استرداد $reservedBookings
         $reservedTimesByDay = $reservedBookings->groupBy(function ($booking) {
             return date('Y-m-d', strtotime($booking->start_date_time));
         })->map(function ($bookings) {
             $times = [];
             foreach ($bookings as $booking) {
-                $currentReserved = strtotime($booking->start_date_time);
-                $endReserved = strtotime($booking->end_date_time);
+                $start = strtotime($booking->start_date_time);
+                $end = strtotime($booking->end_date_time);
 
-                while ($currentReserved < $endReserved) {
-                    $times[] = date('H:i', $currentReserved);
-                    $currentReserved = strtotime('+60 minutes', $currentReserved);
+                while ($start < $end) {
+                    $times[] = date('H:i', $start);
+                    $start = strtotime('+60 minutes', $start);
                 }
             }
             return $times;
         });
 
-        // استخراج التواريخ المحجوزة
         $reservedDates = $reservedBookings->flatMap(function ($booking) {
             $startDate = strtotime(date('Y-m-d', strtotime($booking->start_date_time)));
             $endDate = strtotime(date('Y-m-d', strtotime($booking->end_date_time)));
@@ -516,13 +509,12 @@ class FieldController extends Controller
             return $dates;
         })->unique();
 
-        // تحديد التواريخ المتوفرة بناءً على التواريخ المحجوزة
         $availableDates = collect(range(0, (strtotime($endDate) - strtotime($today)) / 86400))
             ->map(fn($days) => date('Y-m-d', strtotime("+$days days", strtotime($today))))
             ->diff($reservedDates)
             ->values();
 
-        // توليد الأوقات المتاحة بناءً على start_time و end_time من الحقل
+        // تصفية الأوقات المتاحة بناءً على الأوقات المحجوزة
         $availableTimesByDay = $availableDates->mapWithKeys(function ($date) use ($field, $reservedTimesByDay) {
             $availableTimes = [];
             $current = strtotime($field->start_time);
@@ -536,23 +528,35 @@ class FieldController extends Controller
 
             // تصفية الأوقات المتاحة بإزالة الأوقات المحجوزة
             $reservedTimes = $reservedTimesByDay[$date] ?? [];
-            $availableTimes = array_diff($availableTimes, $reservedTimes);
-
-            // إذا لم تكن هناك أوقات متاحة، يتم إرجاع null لإزالة هذا اليوم
-            if (empty($availableTimes)) {
-                return null;
-            }
+            $availableTimes = collect($availableTimes)->reject(function ($time) use ($reservedTimes) {
+                return in_array($time, $reservedTimes);
+            });
 
             return [$date => $availableTimes];
-        })->filter(); // تصفية القيم الفارغة (أي الأيام التي تم حجزها بالكامل).
+        })->filter(function ($times) {
+            return !empty($times); // التأكد من أن هناك أوقات متاحة لهذا التاريخ
+        });
 
-        // إذا لم تكن هناك تواريخ متاحة، نعرض رسالة للمستخدم
-        if ($availableDates->isEmpty()) {
+        // تحديد التواريخ المتاحة بناءً على الأوقات المتاحة
+        $finalAvailableDates = $availableDates->intersect($availableTimesByDay->keys())->values();
+
+        // التأكد من أن التاريخ المحدد لا يتم استبعاده إذا كان متاحًا
+        if ($finalAvailableDates->isEmpty()) {
             return redirect()->back()->with('error', 'No available dates for this field.');
         }
 
-        // إرجاع العرض مع البيانات
-        return view('theme.FieldDetails', compact('field', 'availableDates', 'availableTimesByDay', 'selectedDate', 'reservedTimesByDay'));
+        // التأكد من أن الوقت الذي يتم تحديده يظل مرتبطًا بالتاريخ المختار
+        if (!in_array($selectedDate, $finalAvailableDates->toArray())) {
+            $selectedDate = $finalAvailableDates->first(); // تعيين أول تاريخ متاح في حال عدم تطابق التاريخ المختار
+        }
+
+        return view('theme.FieldDetails', compact(
+            'field',
+            'availableDates',
+            'availableTimesByDay',
+            'selectedDate',
+            'reservedTimesByDay'
+        ));
     }
 
 

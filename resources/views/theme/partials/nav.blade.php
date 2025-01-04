@@ -90,7 +90,7 @@
 
     <div class="header-lower clearfix">
         <div class=container>
-            <div class=row><h1 class=logo><a href=index-2.html><img src={{asset('assets')}}/images/logo.png alt=image></a></h1>
+            <div class=row><h1 class=logo><a href={{route('welcome')}}><img src={{asset('assets')}}/images/logo.png alt=image></a></h1>
 
                 <div class=menubar>
                     <nav class=navbar>

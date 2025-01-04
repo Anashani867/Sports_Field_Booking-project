@@ -21,14 +21,22 @@ class ThemeController extends Controller
     {
         return view('theme.about');
 
-    }  public function gallery()
-{
-    $fields = Field::all();
-    $uniqueLocations = $fields->pluck('location')->unique();
-    return view('theme.gallery', compact('fields', 'uniqueLocations'));
-//        return view('theme.gallery');
+    }
 
-}
+
+    public function gallery()
+    {
+        $fields = Field::with('bookings')->get();
+        $uniqueLocations = $fields->pluck('location')->unique();
+        return view('theme.gallery', compact('fields', 'uniqueLocations'));
+    }
+    public function fieldDetails($id)
+    {
+        $field = Field::with('bookings')->findOrFail($id);  // جلب الحقل بناءً على الـ ID
+        return view('theme.field-details', compact('field'));  // تمرير المتغير إلى العرض
+    }
+
+
 
 //  public function blog()
 //{

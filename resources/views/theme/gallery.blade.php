@@ -273,77 +273,140 @@
                         </li>
                     </ul>
 
-                <!-- Filters Section -->
-                <div class="filters">
-                    <h4>Filters</h4>
-                    <form>
-                        <div class="form-group">
-                            <label for="locationFilter">Location</label>
-                            <select id="locationFilter" class="form-control">
-                                <option value="">All Locations</option>
-                                @foreach($uniqueLocations as $location)
-                                    <option value="{{ $location }}">{{ $location }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="availabilityFilter">Availability</label>
-                            <select id="availabilityFilter" class="form-control">
-                                <option value="">All Availability</option>
-                                <option value="Available">Available</option>
-                                <option value="Not Available">Not Available</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="minPrice">Price Range</label>
-                            <div class="d-flex">
-                                <input type="number" id="minPrice" class="form-control mr-2" placeholder="Min Price">
-                                <input type="number" id="maxPrice" class="form-control" placeholder="Max Price">
+                    <!-- Filters Section -->
+                    <div class="filters">
+                        <h4>Filters</h4>
+                        <form>
+                            <div class="form-group">
+                                <label for="locationFilter">Location</label>
+                                <select id="locationFilter" class="form-control">
+                                    <option value="">All Locations</option>
+                                    @foreach($uniqueLocations as $location)
+                                        <option value="{{ $location }}">{{ $location }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                        </div>
 
-                        <button type="button" id="filterButton" class="btn btn-primary">Apply Filters</button>
-                    </form>
-                </div>
+                            <div class="form-group">
+                                <label for="availabilityFilter">Availability</label>
+                                <select id="availabilityFilter" class="form-control">
+                                    <option value="">All Availability</option>
+                                    <option value="Available">Available</option>
+                                    <option value="Fully Booked">Fully Booked</option>
+                                </select>
+                            </div>
 
+                            <div class="form-group">
+                                <label for="minPrice">Price Range</label>
+                                <div class="d-flex">
+                                    <input type="number" id="minPrice" class="form-control mr-2" placeholder="Min Price">
+                                    <input type="number" id="maxPrice" class="form-control" placeholder="Max Price">
+                                </div>
+                            </div>
 
+                            <button type="button" id="filterButton" class="btn btn-primary">Apply Filters</button>
+                        </form>
+                    </div>
 
                     <div class="tab-content news_display_container clearfix">
                         <a class="prv club_prev slick-arrow" style="display: inline;"></a>
                         <a class="nxt club_next slick-arrow" style="display: inline;"></a>
                         <ul id="club_news" class="tab-pane active row">
-
+                            <!-- Fields Display Section -->
                             @foreach($fields as $field)
-                                <li class="field-card col-lg-6 col-md-6 col-sm-12 mb-4">
-                                    <div class="card">
-                                        <a class="card-link" href="{{ route('Field.Details', ['id' => $field->id]) }}">
+                                <li class="field-card col-lg-6 col-md-6 col-sm-12 mb-4"
+                                    data-location="{{ $field->location }}"
+                                    data-availability="{{ $field->isFullyBooked ? 'Fully Booked' : 'Available' }}"
+                                    data-price="{{ $field->price }}">
+
+                                    @if($field->isFullyBooked)
+                                        {{-- العنصر مغلق --}}
+                                        <div class="card" style="pointer-events: none; opacity: 0.6;">
                                             <div class="figure-01">
                                                 <img src="{{ asset('storage/' . $field->image) }}" alt="{{ $field->field_name }}" class="card-image">
                                             </div>
                                             <div class="content-01">
                                                 <h6 style="color: whitesmoke">{{ $field->field_name }}</h6>
                                                 <p class="red_p">Stories of the legends</p>
-                                                <p style="color: whitesmoke" class="describtion"
-                                                   data-location="{{ $field->location }}"
-                                                   data-availability="{{ $field->availability }}"
-                                                   data-price="{{ $field->price }}">
+                                                <p style="color: whitesmoke" class="describtion">
                                                     <strong style="color: whitesmoke">Location:</strong> {{ $field->location }}<br>
-                                                    <strong style="color: whitesmoke">Availability:</strong> {{ $field->availability }}<br>
+                                                    <strong style="color: whitesmoke">Availability:</strong> <span style="color: red;">Fully Booked</span><br>
                                                     <strong style="color: whitesmoke">Price per Hour:</strong> ${{ $field->price }}
                                                 </p>
                                             </div>
                                             <div class="news_date clearfix">
-                                                <span>{{ $field->availability }}</span>
-{{--                                                <span class="like">❤ 45</span>--}}
+                                                <span style="color: red; font-weight: bold;">Fully Booked</span>
                                             </div>
-                                        </a>
-                                    </div>
+                                        </div>
+                                    @else
+                                        {{-- العنصر متاح --}}
+                                        <div class="card">
+                                            <a class="card-link" href="{{ route('Field.Details', ['id' => $field->id]) }}">
+                                                <div class="figure-01">
+                                                    <img src="{{ asset('storage/' . $field->image) }}" alt="{{ $field->field_name }}" class="card-image">
+                                                </div>
+                                                <div class="content-01">
+                                                    <h6 style="color: whitesmoke">{{ $field->field_name }}</h6>
+                                                    <p class="red_p">Stories of the legends</p>
+                                                    <p style="color: whitesmoke" class="describtion">
+                                                        <strong style="color: whitesmoke">Location:</strong> {{ $field->location }}<br>
+                                                        <strong style="color: whitesmoke">Price per Hour:</strong> ${{ $field->price }}
+                                                    </p>
+                                                    <p>Availability:
+                                                        @if($field->isFullyBooked)
+                                                            Fully Booked
+                                                        @else
+                                                            Available
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                                <div class="news_date clearfix">
+                                                    <span>Available</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    @endif
                                 </li>
                             @endforeach
+
                         </ul>
                     </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.getElementById('filterButton').addEventListener('click', function() {
+                                // Get values from inputs
+                                const location = document.getElementById('locationFilter').value.trim().toLowerCase();
+                                const availability = document.getElementById('availabilityFilter').value.trim().toLowerCase();
+                                const minPrice = parseFloat(document.getElementById('minPrice').value.trim()) || 0;
+                                const maxPrice = parseFloat(document.getElementById('maxPrice').value.trim()) || Infinity;
+
+                                // Get all field cards
+                                const fieldCards = document.querySelectorAll('.field-card');
+                                fieldCards.forEach(card => {
+                                    // Get data attributes from each card
+                                    const cardLocation = card.getAttribute('data-location').trim().toLowerCase();
+                                    const cardAvailability = card.getAttribute('data-availability').trim().toLowerCase();
+                                    const cardPrice = parseFloat(card.getAttribute('data-price'));
+
+                                    // Check if the card matches the filters
+                                    const isLocationMatch = !location || cardLocation.includes(location);
+                                    const isAvailabilityMatch = !availability || cardAvailability.includes(availability);
+                                    const isPriceMatch = (cardPrice >= minPrice) && (cardPrice <= maxPrice);
+
+                                    // Show or hide card based on filters
+                                    if (isLocationMatch && isAvailabilityMatch && isPriceMatch) {
+                                        card.style.display = 'block'; // Show card
+                                    } else {
+                                        card.style.display = 'none'; // Hide card
+                                    }
+                                });
+                            });
+                        });
+
+                    </script>
+
+
                 </div>
             </div>
         </section>
@@ -580,35 +643,4 @@
         }
     }
 </style>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('filterButton').addEventListener('click', function() {
-            const location = document.getElementById('locationFilter').value.trim().toLowerCase();
-            const availability = document.getElementById('availabilityFilter').value.trim().toLowerCase();
-            const minPrice = parseFloat(document.getElementById('minPrice').value.trim()) || 0;
-            const maxPrice = parseFloat(document.getElementById('maxPrice').value.trim()) || Infinity;
-
-            const fieldCards = document.querySelectorAll('.field-card');
-            fieldCards.forEach(card => {
-                const cardLocation = card.querySelector('.describtion').dataset.location.trim().toLowerCase();
-                const cardAvailability = card.querySelector('.describtion').dataset.availability.trim().toLowerCase();
-                const cardPrice = parseFloat(card.querySelector('.describtion').dataset.price);
-
-                const isLocationMatch = !location || cardLocation.includes(location);
-                const isAvailabilityMatch = !availability || cardAvailability.includes(availability);
-                const isPriceMatch = (cardPrice >= minPrice) && (cardPrice <= maxPrice);
-
-                if (isLocationMatch && isAvailabilityMatch && isPriceMatch) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    });
-
-
-
-</script>
 
