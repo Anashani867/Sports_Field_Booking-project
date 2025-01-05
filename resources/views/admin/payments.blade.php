@@ -134,7 +134,7 @@
                 <div class="card bg-warning text-white mb-4">
                     <div class="card-body">
                         <h4>Pending Payments</h4>
-                        <h2>${{ number_format($stats['pending_payments'], 2) }}</h2>
+                        <h2>JD{{ number_format($stats['pending_payments'], 2) }}</h2>
                     </div>
                 </div>
             </div>
@@ -199,7 +199,7 @@
                             <td>{{ $payment->id }}</td>
                             <td>{{ $payment->user->name ?? 'N/A' }}</td>
                             <td>{{ $payment->booking_id }}</td>
-                            <td>${{ number_format($payment->amount, 2) }}</td>
+                            <td>JD{{ number_format($payment->amount, 2) }}</td>
                             <td>
                                 <span class="badge bg-info">{{ $payment->payment_method }}</span>
                             </td>

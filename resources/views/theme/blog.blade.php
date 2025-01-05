@@ -463,18 +463,18 @@
                                         {{ $item->description }}  <!-- عرض الوصف المضاف مع الوسائط -->
                                     </p>
 
-                                    <div class="blog-detailsfooter clearfix">
-                                        <div class="blog-detailsfooter01 clearfix">
-                                            <a href="https://www.facebook.com" class="social_link facebook"><i class="fa fa-facebook"></i></a>
-                                            <a href="https://twitter.com" class="social_link twitter"><i class="fa fa-twitter"></i></a>
-                                            <a href="https://www.behance.net" class="social_link behance"><i class="fa fa-behance"></i></a>
-                                        </div>
-                                        <div class="blog-detailsfooter02">
-                                            <a href="blogDetails.html" class="btn-small01 btn-red">View More</a>
-                                        </div>
+{{--                                    <div class="blog-detailsfooter clearfix">--}}
+{{--                                        <div class="blog-detailsfooter01 clearfix">--}}
+{{--                                            <a href="https://www.facebook.com" class="social_link facebook"><i class="fa fa-facebook"></i></a>--}}
+{{--                                            <a href="https://twitter.com" class="social_link twitter"><i class="fa fa-twitter"></i></a>--}}
+{{--                                            <a href="https://www.behance.net" class="social_link behance"><i class="fa fa-behance"></i></a>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="blog-detailsfooter02">--}}
+{{--                                            <a href="blogDetails.html" class="btn-small01 btn-red">View More</a>--}}
+{{--                                        </div>--}}
                                     </div>
                                 </div>
-                            </div>
+
                         @endforeach
                     </main>
                 </div>

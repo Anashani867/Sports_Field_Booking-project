@@ -28,6 +28,7 @@ class Field extends Model
         'latitude',
         'longitude',
         'isFullyBooked',
+        'person'
     ];
 
 
@@ -50,13 +51,24 @@ class Field extends Model
     public function getIsFullyBookedAttribute()
     {
         $today = date('Y-m-d');
-        $reservedBookings = $this->bookings()
-            ->where(function ($query) use ($today) {
-                $query->whereBetween('start_date_time', ["$today 00:00:00", "$today 23:59:59"])
-                    ->orWhereBetween('end_date_time', ["$today 00:00:00", "$today 23:59:59"]);
-            })
-            ->exists();
 
-        return $reservedBookings;
+        // السعة المتاحة للحقل (تحدد بناءً على الأيام المتاحة)
+        $endDate = $this->end_date ?? date('Y-m-d', strtotime('+7 days', strtotime($today))); // تحديد تاريخ نهاية الأيام المتاحة
+        $availableDays = (new \DateTime($today))->diff(new \DateTime($endDate))->days + 1; // حساب عدد الأيام المتاحة (بما في ذلك اليوم الحالي)
+        $totalCapacity = $this->capacity * $availableDays ; // السعة الكلية = السعة اليومية × عدد الأيام المتاحة
+
+        // عدّ الحجوزات التي تقع ضمن الفترة الزمنية المتاحة
+        $reservedBookingsCount = $this->bookings()
+            ->where(function ($query) use ($today, $endDate) {
+                $query->whereBetween('start_date_time', ["$today 00:00:00", "$endDate 23:59:59"])
+                    ->orWhereBetween('end_date_time', ["$today 00:00:00", "$endDate 23:59:59"]);
+            })
+            ->count();
+
+        // مقارنة العدد مع السعة الكلية للحقل
+        return $reservedBookingsCount >= $totalCapacity;
     }
+
+
+
 }

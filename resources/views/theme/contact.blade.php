@@ -22,7 +22,6 @@
                         <li><a href=tel:80052608885263><i class="fa fa-phone"></i> <span>+1 800-256-9876</span></a></li>
                         <li><a href=mailto:mail@yoursite.com><i class="fa fa-envelope-o"></i>
                                 <span>info@soccerclub.com</span></a></li>
-                        <li><a href=#><i class="fa fa-map-marker"></i> <span>321/1 bakersssstreet,Newwork</span></a>
                         </li>
                     </ul>
                 </div>

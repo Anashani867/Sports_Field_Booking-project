@@ -96,137 +96,224 @@
     <style>
         /* Style the modal (hidden by default) */
         /* Modal background */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            background-color: rgba(0, 0, 0, 0.7); /* Black with opacity */
+        /* Main Container Styles */
+        .wrapper {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            padding: 40px 0;
         }
 
-        /* Modal content */
-        .modal-content {
-            background-color: #333; /* Dark background for the modal */
-            color: white; /* White text */
-            margin: 10% auto; /* Centered */
-            padding: 20px;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 10px; /* Rounded corners */
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+        /* Field Image Styles */
+        .figure-01 img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        /* Close button */
-        .close {
-            color: #f1f1f1;
-            font-size: 30px;
-            font-weight: bold;
-            position: absolute;
-            top: 10px;
-            right: 25px;
-            cursor: pointer;
-        }
-
-        /* Heading */
-        h2 {
-            color: #FF5C5C; /* Red color for heading */
-            font-size: 24px;
+        /* Field Details Styles */
+        .content-01 {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
 
-        /* Input groups */
-        .input-group {
-            margin-bottom: 15px;
+        .field-title {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
         }
 
-        .input-group label {
+        .field-name {
+            color: red;
+            font-weight: 600;
+        }
+
+        .describtion strong {
+            color: #34495e;
             font-size: 16px;
-            margin-bottom: 5px;
+        }
+
+        /* Booking Form Styles */
+        .booking-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 8px;
             display: block;
         }
 
-        .input-group input {
+        .form-control {
             width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #222; /* Dark background for inputs */
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.2rem rgba(52,152,219,0.25);
+        }
+
+        /* Modal Styles */
+        .modal {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 5% auto;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #e74c3c;
+        }
+
+        /* Button Styles */
+        .btn-booking {
+            background: #3498db;
             color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
         }
 
-        .input-group input:focus {
-            outline: none;
-            border-color: #FF5C5C; /* Red border on focus */
+        .btn-booking:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52,152,219,0.3);
         }
 
-        /* Button group */
+        /* Payment Form Styles */
+        .payment-form {
+            margin-top: 20px;
+        }
+
+        .payment-form input {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
         .button-group {
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
+            gap: 15px;
+            margin-top: 25px;
         }
 
         .confirm-btn {
-            background-color: #FF5C5C; /* Red background */
+            background: #2ecc71;
             color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            flex: 1;
+            font-weight: 600;
+            transition: all 0.3s;
         }
 
         .cancel-btn {
-            background-color: #444; /* Dark grey background */
+            background: #e74c3c;
             color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            flex: 1;
+            font-weight: 600;
+            transition: all 0.3s;
         }
 
-        button:hover {
-            opacity: 0.9;
+        .confirm-btn:hover {
+            background: #27ae60;
         }
 
-        /* تنسيق الـ Popup */
-        .popup {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.4);
-            padding-top: 60px;
+        .cancel-btn:hover {
+            background: #c0392b;
         }
 
-        .popup-content {
-            background-color: #fefefe;
-            margin: 5% auto;
+        /* Summary Section Styles */
+        #summary {
+            background: #f8f9fa;
             padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
+            border-radius: 8px;
+            margin-top: 20px;
         }
 
-        .close-btn {
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute;
-            right: 10px;
-            top: 5px;
+        #summary p {
+            margin-bottom: 10px;
+            color: #2c3e50;
         }
 
-        .close-btn:hover,
-        .close-btn:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+        #summary strong {
+            color: #34495e;
+        }
+
+        /* Error Message Styles */
+        .alert-danger {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #b91c1c;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* Success Message Styles */
+        .alert-success {
+            background-color: #dcfce7;
+            border: 1px solid #22c55e;
+            color: #15803d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
 
     </style>
@@ -249,11 +336,11 @@
                         <div class="content-01">
                             <h6 class="field-title">Field Name: <span class="field-name">{{ $field->field_name }}</span></h6>
                             <p class="describtion">
-                                <strong>Location:</strong> {{ $field->location }}<br>
+                                <strong style="color: gray">Location:</strong> {{ $field->location }}<br>
                                 <strong>Availability:</strong> {{ $field->availability ? 'Available' : 'Not Available' }}<br>
-                                <strong>Price Per Hour:</strong> ${{ $field->price }}
+                                <strong>Price Per Hour:</strong> JD{{ $field->price }}
                             </p>
-                            <p>{{ $field->description }}</p>
+                            <strong>person:</strong> {{ $field->person }}<br>
                         </div>
 
                         <!-- عرض رسالة النجاح -->
@@ -288,13 +375,13 @@
                         @endif
 
 
-                                                <span class="capitalize01">
-                            @if ($field->latitude && $field->longitude)
-                                Latitude: {{ $field->latitude }}, Longitude: {{ $field->longitude }}
-                            @else
-                                Latitude and Longitude not available.
-                            @endif
-                        </span>
+{{--                                                <span class="capitalize01">--}}
+{{--                            @if ($field->latitude && $field->longitude)--}}
+{{--                                Latitude: {{ $field->latitude }}, Longitude: {{ $field->longitude }}--}}
+{{--                            @else--}}
+{{--                                Latitude and Longitude not available.--}}
+{{--                            @endif--}}
+{{--                        </span>--}}
 
                         <!-- زر الحجز -->
                         <div class="news_date clearfix">
@@ -337,7 +424,6 @@
                                     <label for="payment-method" style="font-size: 1.1rem; font-weight: bold; color: #555;">Payment Method:</label>
                                     <select name="payment_method" id="payment-method" style="padding-left: 30px; width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px;" required>
                                         <option value="credit_card">Credit Card</option>
-                                        <option value="paypal">PayPal</option>
                                     </select>
                                 </div>
 
@@ -354,7 +440,7 @@
                                     <p>Date: <span id="summary-date"></span></p>
                                     <p>Start Time: <span id="summary-start"></span></p>
                                     <p>End Time: <span id="summary-end"></span></p>
-                                    <p>Total Amount: <span id="summary-amount">{{ $field->price }}</span></p>
+                                    <p>Total Amount: <span id="summary-amount">JD{{ $field->price }}</span></p>
                                 </div>
 
                                 <!-- Submit Button -->
@@ -372,9 +458,38 @@
                                         <p><strong>Date:</strong> <span id="modal-booking-date"></span></p>
                                         <p><strong>Start Time:</strong> <span id="modal-start-time"></span></p>
                                         <p><strong>End Time:</strong> <span id="modal-end-time"></span></p>
-
                                         <p><strong>Field:</strong> <span id="modal-field-name"></span></p>
+                                        <p><strong>Total Amount: </strong> <span id="summary-amount">JD{{ $field->price }}</span></p>
 
+
+                                        <script>
+                                            const availableTimes = availableTimesByDay[selectedDate] || [];
+
+                                            // ملء الخيارات في "Start Time" و "End Time"
+                                            function populateTimeOptions() {
+                                                const startSelect = document.getElementById('start-time');
+                                                const endSelect = document.getElementById('end-time');
+
+                                                // إضافة الأوقات إلى قائمة "Start Time"
+                                                availableTimes.forEach(time => {
+                                                    const option = document.createElement('option');
+                                                    option.value = time;
+                                                    option.textContent = time;
+                                                    startSelect.appendChild(option);
+                                                });
+
+                                                // إضافة الأوقات إلى قائمة "End Time"
+                                                availableTimes.forEach(time => {
+                                                    const option = document.createElement('option');
+                                                    option.value = time;
+                                                    option.textContent = time;
+                                                    endSelect.appendChild(option);
+                                                });
+                                            }
+
+                                            // استدعاء الدالة عند تحميل الصفحة
+                                            window.onload = populateTimeOptions;
+                                            </script>
                                         <!-- Payment Details Section -->
                                         <form id="paymentForm" action="https://yourwebsite.com/payment" method="POST" autocomplete="on">
                                             @csrf

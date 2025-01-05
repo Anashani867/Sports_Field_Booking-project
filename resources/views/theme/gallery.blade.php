@@ -319,9 +319,11 @@
                                     data-availability="{{ $field->isFullyBooked ? 'Fully Booked' : 'Available' }}"
                                     data-price="{{ $field->price }}">
 
-                                    @if($field->isFullyBooked)
-                                        {{-- العنصر مغلق --}}
-                                        <div class="card" style="pointer-events: none; opacity: 0.6;">
+                                    <div class="card"
+                                         style="{{ $field->isFullyBooked ? 'pointer-events: none; opacity: 0.6;' : '' }}">
+
+                                        @if($field->isFullyBooked)
+                                            <!-- Display for Fully Booked Field -->
                                             <div class="figure-01">
                                                 <img src="{{ asset('storage/' . $field->image) }}" alt="{{ $field->field_name }}" class="card-image">
                                             </div>
@@ -331,16 +333,14 @@
                                                 <p style="color: whitesmoke" class="describtion">
                                                     <strong style="color: whitesmoke">Location:</strong> {{ $field->location }}<br>
                                                     <strong style="color: whitesmoke">Availability:</strong> <span style="color: red;">Fully Booked</span><br>
-                                                    <strong style="color: whitesmoke">Price per Hour:</strong> ${{ $field->price }}
+                                                    <strong style="color: whitesmoke">Price per Hour:</strong> JD{{ $field->price }}
                                                 </p>
                                             </div>
                                             <div class="news_date clearfix">
                                                 <span style="color: red; font-weight: bold;">Fully Booked</span>
                                             </div>
-                                        </div>
-                                    @else
-                                        {{-- العنصر متاح --}}
-                                        <div class="card">
+                                        @else
+                                            <!-- Display for Available Field -->
                                             <a class="card-link" href="{{ route('Field.Details', ['id' => $field->id]) }}">
                                                 <div class="figure-01">
                                                     <img src="{{ asset('storage/' . $field->image) }}" alt="{{ $field->field_name }}" class="card-image">
@@ -350,25 +350,18 @@
                                                     <p class="red_p">Stories of the legends</p>
                                                     <p style="color: whitesmoke" class="describtion">
                                                         <strong style="color: whitesmoke">Location:</strong> {{ $field->location }}<br>
-                                                        <strong style="color: whitesmoke">Price per Hour:</strong> ${{ $field->price }}
+                                                        <strong style="color: whitesmoke">Price per Hour:</strong> JD{{ $field->price }}
                                                     </p>
-                                                    <p>Availability:
-                                                        @if($field->isFullyBooked)
-                                                            Fully Booked
-                                                        @else
-                                                            Available
-                                                        @endif
-                                                    </p>
+                                                    <p>Availability: Available</p>
                                                 </div>
                                                 <div class="news_date clearfix">
                                                     <span>Available</span>
                                                 </div>
                                             </a>
-                                        </div>
-                                    @endif
+                                        @endif
+                                    </div>
                                 </li>
                             @endforeach
-
                         </ul>
                     </div>
 
@@ -378,8 +371,8 @@
                                 // Get values from inputs
                                 const location = document.getElementById('locationFilter').value.trim().toLowerCase();
                                 const availability = document.getElementById('availabilityFilter').value.trim().toLowerCase();
-                                const minPrice = parseFloat(document.getElementById('minPrice').value.trim()) || 0;
-                                const maxPrice = parseFloat(document.getElementById('maxPrice').value.trim()) || Infinity;
+                                const minPrice = isNaN(parseFloat(document.getElementById('minPrice').value.trim())) ? 0 : parseFloat(document.getElementById('minPrice').value.trim());
+                                const maxPrice = isNaN(parseFloat(document.getElementById('maxPrice').value.trim())) ? Infinity : parseFloat(document.getElementById('maxPrice').value.trim());
 
                                 // Get all field cards
                                 const fieldCards = document.querySelectorAll('.field-card');
@@ -390,8 +383,8 @@
                                     const cardPrice = parseFloat(card.getAttribute('data-price'));
 
                                     // Check if the card matches the filters
-                                    const isLocationMatch = !location || cardLocation.includes(location);
-                                    const isAvailabilityMatch = !availability || cardAvailability.includes(availability);
+                                    const isLocationMatch = !location || cardLocation === location;
+                                    const isAvailabilityMatch = !availability || cardAvailability === availability;
                                     const isPriceMatch = (cardPrice >= minPrice) && (cardPrice <= maxPrice);
 
                                     // Show or hide card based on filters
@@ -403,7 +396,6 @@
                                 });
                             });
                         });
-
                     </script>
 
 

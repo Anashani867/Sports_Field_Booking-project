@@ -418,7 +418,7 @@
                                                    data-price="{{ $field->price }}">
                                                     <strong style="color: whitesmoke">Location:</strong> {{ $field->location }}<br>
                                                     <strong style="color: whitesmoke">Availability:</strong> {{ $field->availability }}<br>
-                                                    <strong style="color: whitesmoke">Price per Hour:</strong> ${{ $field->price }}
+                                                    <strong style="color: whitesmoke">Price per Hour:</strong> JD{{ $field->price }}
                                                 </p>
 
                                                </div>

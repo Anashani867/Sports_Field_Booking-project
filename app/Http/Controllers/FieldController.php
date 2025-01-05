@@ -88,6 +88,8 @@ class FieldController extends Controller
             'booking_end_date' => 'required|date|after_or_equal:booking_start_date',
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'person' => 'required|integer',
+
         ]);
 
         // Process the data
@@ -112,6 +114,8 @@ class FieldController extends Controller
             'latitude' => $data['latitude'],
             'longitude' => $data['longitude'],
             'image' => $data['image'] ?? null,
+            'person' => $data['person'],
+
         ]);
 
         // Redirect with success message
@@ -478,6 +482,7 @@ class FieldController extends Controller
     public function showFieldDetails($fieldId, Request $request)
     {
         $field = Field::find($fieldId);
+
 
         if (!$field) {
             return redirect()->back()->with('error', 'Field not found.');

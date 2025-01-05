@@ -504,6 +504,11 @@
         <input type="date" id="booking_end_date" name="booking_end_date" required>
     </div>
 
+    <!-- New Field for Capacity -->
+    <div class="form-group">
+        <label for="capacity">Field Capacity:</label>
+        <input type="number" id="person" name="person" placeholder="Enter Field play" required>
+    </div>
 
     <label>Drag Marker to Set Location:</label>
     <div id="map"></div>

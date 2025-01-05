@@ -27,14 +27,28 @@ class ThemeController extends Controller
     public function gallery()
     {
         $fields = Field::with('bookings')->get();
+
+        // إضافة منطق لتحديد حالة الحقول
+        foreach ($fields as $field) {
+            $totalBookings = $field->bookings->count(); // عدد الحجوزات الحالية
+            $field->isFullyBooked = $totalBookings >= $field->capacity; // تحديد إذا كان ممتلئًا بالكامل
+        }
+
         $uniqueLocations = $fields->pluck('location')->unique();
         return view('theme.gallery', compact('fields', 'uniqueLocations'));
     }
+
     public function fieldDetails($id)
     {
-        $field = Field::with('bookings')->findOrFail($id);  // جلب الحقل بناءً على الـ ID
-        return view('theme.field-details', compact('field'));  // تمرير المتغير إلى العرض
+        $field = Field::with('bookings')->findOrFail($id);
+
+        // تحديد حالة الحجز
+        $totalBookings = $field->bookings->count(); // عدد الحجوزات
+        $field->isFullyBooked = $totalBookings >= $field->capacity; // تحديد إذا كان ممتلئًا
+
+        return view('theme.field-details', compact('field')); // تمرير المتغير إلى العرض
     }
+
 
 
 

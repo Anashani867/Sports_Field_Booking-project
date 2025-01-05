@@ -3,6 +3,7 @@
     about <span>us</span>
 @endsection
 @section('about-active','active')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 @section('content')
 
@@ -66,10 +67,11 @@
                                 </div>
 
                                 <div class="bg-redcolor fig02">
-                                    <ul>
-                                        <li><a href="https://www.linkedin.com/in/anas-hassan-se/" target="_blank">LinkedIn</a></li>
-                                        <li><a href="https://github.com/Anashani867" target="_blank">GitHub</a></li>
+                                    <ul class="social-links">
+                                        <li><a href="https://www.linkedin.com/in/anas-hassan-se/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                                        <li><a href="https://github.com/Anashani867" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
                                     </ul>
+
                                 </div>
                             </div>
                         </li>
@@ -86,12 +88,12 @@
     <div class=container>
         <div class=row><h2 class=heading>spon<span>sors</span></h2>
             <ul class="client clearfix">
-                <li><a href="#"><img src={{asset('assets')}}/images/client/Orange_logo.svg.png alt=image></a></li>
-                <li><a href="#"><img src={{asset('assets')}}/images/client/PSUT_Logo.png alt=image></a></li>
-                <li><a href="#"><img src={{asset('assets')}}/images/client/amideast_logo.png alt=image></a></li>
-                <li><a href="#"><img src={{asset('assets')}}/images/client/modee_logo.jpg alt=image></a></li>
-                <li><a href="#"><img src={{asset('assets')}}/images/client/logo_simplon.webp alt=image></a></li>
-                <li><a href="#"><img src={{asset('assets')}}/images/client/DigiSkills_Jordan.jpg alt=image></a></li>
+                <li><a href="#"><img style="width: 120PX; height: 120px; object-fit: contain"  src={{asset('assets')}}/images/client/Orange_logo.svg.png alt=image></a></li>
+                <li><a href="#"><img style="width: 120PX; height: 120px; object-fit: contain" src={{asset('assets')}}/images/client/PSUT_Logo.png alt=image></a></li>
+                <li><a href="#"><img style="width: 120PX; height: 120px; object-fit: contain" src={{asset('assets')}}/images/client/amideast_logo.png alt=image></a></li>
+                <li><a href="#"><img style="width: 120PX; height: 120px; object-fit: contain" src={{asset('assets')}}/images/client/modee_logo.jpg alt=image></a></li>
+                <li><a href="#"><img style="width: 120PX; height: 120px; object-fit: contain" src={{asset('assets')}}/images/client/logo_simplon.webp alt=image></a></li>
+                <li><a href="#"><img style="width: 120PX; height: 120px; object-fit: contain" src={{asset('assets')}}/images/client/DigiSkills_Jordan.jpg alt=image></a></li>
             </ul>
         </div>
     </div>

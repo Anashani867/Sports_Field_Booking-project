@@ -135,10 +135,10 @@
                                     class="fa fa-behance"></i></a></li>
                     </ul>
                     <p><a target="_blank" href="https://www.templatespoint.net/">Templates Point</a></p></div>
-                <div class=footer-appstore>
-                    <figure><a href=#><img src={{asset('assets')}}/images/appstore/apple.png alt=image></a></figure>
-                    <figure><a href=#><img src={{asset('assets')}}/images/appstore/google.png alt=image></a></figure>
-                </div>
+{{--           '     <div class=footer-appstore>--}}
+{{--                    <figure><a href=#><img src={{asset('assets')}}/images/appstore/apple.png alt=image></a></figure>--}}
+{{--                    <figure><a href=#><img src={{asset('assets')}}/images/appstore/google.png alt=image></a></figure>--}}
+{{--                </div>'--}}
             </div>
         </div>
     </div>

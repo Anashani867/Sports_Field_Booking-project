@@ -169,23 +169,23 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <!-- Remember Me and Forgot Password -->
-        <div class="flex items-center justify-between mt-4 mb-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me"
-                       type="checkbox"
-                       name="remember"
-                       class="rounded border-gray-300">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
+{{--        <!-- Remember Me and Forgot Password -->--}}
+{{--        <div class="flex items-center justify-between mt-4 mb-4">--}}
+{{--            <label for="remember_me" class="inline-flex items-center">--}}
+{{--                <input id="remember_me"--}}
+{{--                       type="checkbox"--}}
+{{--                       name="remember"--}}
+{{--                       class="rounded border-gray-300">--}}
+{{--                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>--}}
+{{--            </label>--}}
 
-            @if (Route::has('password.request'))
-                <a class="custom-link text-sm"
-                   href="{{ route('password.request') }}">
-                    {{ __('Forgot password?') }}
-                </a>
-            @endif
-        </div>
+{{--            @if (Route::has('password.request'))--}}
+{{--                <a class="custom-link text-sm"--}}
+{{--                   href="{{ route('password.request') }}">--}}
+{{--                    {{ __('Forgot password?') }}--}}
+{{--                </a>--}}
+{{--            @endif--}}
+{{--        </div>--}}
 
         <div class="form-group">
             <button type="submit" class="custom-button">
