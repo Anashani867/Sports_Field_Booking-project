@@ -96,224 +96,202 @@
     <style>
         /* Style the modal (hidden by default) */
         /* Modal background */
-        /* Main Container Styles */
-        .wrapper {
-            background-color: #f8f9fa;
-            min-height: 100vh;
-            padding: 40px 0;
-        }
-
-        /* Field Image Styles */
-        .figure-01 img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        /* Field Details Styles */
-        .content-01 {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .field-title {
-            font-size: 24px;
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-
-        .field-name {
-            color: red;
-            font-weight: 600;
-        }
-
-        .describtion strong {
-            color: #34495e;
-            font-size: 16px;
-        }
-
-        /* Booking Form Styles */
-        .booking-form {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            color: #2c3e50;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            transition: all 0.3s;
-            font-size: 15px;
-        }
-
-        .form-control:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 0.2rem rgba(52,152,219,0.25);
-        }
-
-        /* Modal Styles */
         .modal {
-            background-color: rgba(0, 0, 0, 0.8);
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            background-color: rgba(0, 0, 0, 0.7); /* Black with opacity */
         }
 
+        /* Modal content */
         .modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
+            background-color: #333; /* Dark background for the modal */
+            color: white; /* White text */
+            margin: 10% auto; /* Centered */
+            padding: 20px;
+            width: 80%;
             max-width: 500px;
-            margin: 5% auto;
-            position: relative;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
         }
 
-        .modal-header {
-            border-bottom: 2px solid #f1f1f1;
-            padding-bottom: 15px;
+        /* Close button */
+        .close {
+            color: #f1f1f1;
+            font-size: 30px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            cursor: pointer;
+        }
+
+        /* Heading */
+        h2 {
+            color: #FF5C5C; /* Red color for heading */
+            font-size: 24px;
             margin-bottom: 20px;
         }
 
-        .modal-title {
-            color: #2c3e50;
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .close {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            font-size: 28px;
-            color: #666;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .close:hover {
-            color: #e74c3c;
-        }
-
-        /* Button Styles */
-        .btn-booking {
-            background: #3498db;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            width: 100%;
-            transition: all 0.3s;
-        }
-
-        .btn-booking:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(52,152,219,0.3);
-        }
-
-        /* Payment Form Styles */
-        .payment-form {
-            margin-top: 20px;
-        }
-
-        .payment-form input {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            padding: 12px;
-            border-radius: 8px;
-            width: 100%;
+        /* Input groups */
+        .input-group {
             margin-bottom: 15px;
         }
 
+        .input-group label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #222; /* Dark background for inputs */
+            color: white;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #FF5C5C; /* Red border on focus */
+        }
+
+        /* Button group */
         .button-group {
             display: flex;
-            gap: 15px;
-            margin-top: 25px;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
         }
 
         .confirm-btn {
-            background: #2ecc71;
+            background-color: #FF5C5C; /* Red background */
             color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            flex: 1;
-            font-weight: 600;
-            transition: all 0.3s;
         }
 
         .cancel-btn {
-            background: #e74c3c;
+            background-color: #444; /* Dark grey background */
             color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            flex: 1;
-            font-weight: 600;
-            transition: all 0.3s;
         }
 
-        .confirm-btn:hover {
-            background: #27ae60;
+        button:hover {
+            opacity: 0.9;
         }
 
-        .cancel-btn:hover {
-            background: #c0392b;
+        /* تنسيق الـ Popup */
+        .popup {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
         }
 
-        /* Summary Section Styles */
-        #summary {
-            background: #f8f9fa;
+        .popup-content {
+            background-color: #fefefe;
+            margin: 5% auto;
             padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
+            border: 1px solid #888;
+            width: 80%;
         }
 
-        #summary p {
-            margin-bottom: 10px;
-            color: #2c3e50;
+        .close-btn {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            right: 10px;
+            top: 5px;
         }
 
-        #summary strong {
-            color: #34495e;
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .content-01 {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
         }
 
-        /* Error Message Styles */
-        .alert-danger {
-            background-color: #fee2e2;
-            border: 1px solid #ef4444;
-            color: #b91c1c;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        .field-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1.25rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.75rem;
         }
 
-        /* Success Message Styles */
-        .alert-success {
-            background-color: #dcfce7;
-            border: 1px solid #22c55e;
-            color: #15803d;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        .field-name {
+            color: #3B82F6;
+            font-weight: 700;
+        }
+
+        .describtion {
+            line-height: 1.8;
+            color: #4B5563;
+        }
+
+        .describtion strong {
+            display: inline-block;
+            width: 140px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Add some spacing between information lines */
+        .describtion br {
+            content: "";
+            display: block;
+            margin: 8px 0;
+        }
+
+        /* Style for availability status */
+        .describtion strong + span {
+            color: #059669;  /* Green color for available */
+        }
+
+        /* Price styling */
+        strong + span:contains('JD') {
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        /* Person info styling */
+        .content-01 > strong {
+            display: inline-block;
+            width: 140px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .content-01 > strong + span {
+            color: #4B5563;
         }
 
     </style>
